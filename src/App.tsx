@@ -2,10 +2,8 @@ import "./styles/styles.css";
 
 export default function App() {
   return (
-    <>
-      <h1 className="h-1 text-amber-800">
-        hello, I'm using vite react ts with tailwindcss
-      </h1>
-    </>
+    <div className="min-h-screen flex items-center justify-center bg-primary-800">
+      texto con colores personalizados
+    </div>
   );
 }
