@@ -1,5 +1,5 @@
-import LeftMenu from "./components/LeftMenu";
-import Nav from "./components/Nav";
+import LeftMenu from "./layouts/LeftMenu";
+import Nav from "./layouts/Nav";
 
 import "./styles/styles.css";
 
