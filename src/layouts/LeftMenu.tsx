@@ -10,6 +10,7 @@ import {
   Menu,
 } from "lucide-react";
 import { useState } from "react";
+import { Button } from "../components/Button";
 
 interface menuItem {
   icon: LucideIcon;
@@ -58,12 +59,9 @@ export default function LeftMenu() {
 
   return (
     <div className="h-full">
-      <button
-        onClick={() => setOpen(!open)}
-        className="md:hidden fixed top-4 right-4 z-40 p-2 rounded-md bg-neutral-50 dark:bg-gray-700"
-      >
-        <Menu strokeWidth={1} />
-      </button>
+      <Button className="md:hidden fixed top-4 right-4 z-40 p-2 rounded-md bg-neutral-50 dark:bg-gray-700">
+        <Menu onClick={() => setOpen(!open)} strokeWidth={1} />
+      </Button>
       <aside
         id="default-sidebar"
         className={`fixed inset-0 h-screen w-full md:relative md:h-full md:w-64 bg-white shadow-md transition-transform duration-300 ${
