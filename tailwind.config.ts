@@ -147,8 +147,36 @@ const config: Config = {
         xs: "2px", // efecto blur ligero para fondos traslúcidos o modales
       },
       screens: {
-        xs: "475px", // breakpoint extra pequeño para móviles
-        "3xl": "1600px", // breakpoint para pantallas muy grandes
+        // Móviles pequeños (ej: Galaxy Fold)
+        xs: "320px",
+        // Móviles estándar
+        sm: "480px",
+        // Tablets pequeñas (ej: iPad Mini en portrait)
+        md: "768px",
+        // Tablets grandes/pequeños laptops (ej: iPad Pro 11")
+        lg: "1024px",
+        // Laptops/desktops estándar
+        xl: "1280px",
+        // Pantallas grandes (monitores HD)
+        "2xl": "1536px",
+        // Pantallas extra grandes (4K/QHD)
+        "3xl": "1920px",
+        // Super pantallas (ej: ultra wide)
+        "4xl": "2560px",
+
+        // Breakpoints personalizados por altura (útil para layouts verticales)
+        "h-sm": { raw: "(min-height: 640px)" },
+        "h-md": { raw: "(min-height: 768px)" },
+
+        // Breakpoints para orientación
+        portrait: { raw: "(orientation: portrait)" },
+        landscape: { raw: "(orientation: landscape)" },
+
+        // Breakpoints específicos para dispositivos
+        "iphone-se": "375px", // iPhone SE/6/7/8
+        "iphone-x": "812px", // iPhone X/11 Pro
+        "ipad-mini": "768px", // iPad Mini
+        "surface-duo": "540px", // Microsoft Surface Duo
       },
     },
   },
