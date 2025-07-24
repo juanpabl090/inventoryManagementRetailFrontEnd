@@ -2,7 +2,7 @@ import { Store } from "lucide-react";
 
 export default function Nav() {
   return (
-    <nav className="flex items-center bg-white h-16 shadow-sm w-full px-4 sm:px-6 lg:px-8">
+    <nav className="flex items-center bg-white h-16 border-b-2 border-neutral-200 w-full px-4 sm:px-6 lg:px-8">
       <div className="flex items-center space-x-3 w-full max-w-7xl mx-auto">
         <div className="h-10 w-10 rounded-xl bg-primary-600 flex-shrink-0 flex items-center justify-center">
           <Store className="h-6 w-6 text-white" />

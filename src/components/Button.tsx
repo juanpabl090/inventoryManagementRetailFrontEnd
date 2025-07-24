@@ -1,9 +1,9 @@
 // components/Button.tsx
-import type { ReactNode } from "react";
+import type { ReactNode, MouseEventHandler } from "react";
 
 type ButtonProps = {
   children?: ReactNode;
-  onClick?: () => void;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   className?: string;
   variant?: "solid" | "outline" | "ghost";
   size?: "sm" | "md" | "lg";
