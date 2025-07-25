@@ -151,6 +151,14 @@ export default function ProductCard({
           isOpen={isOpen}
           onClose={handleClose}
           title="Edit Product"
+          name={name}
+          stock={stock}
+          description={description}
+          buyPrice={buyPrice}
+          salePrice={salePrice}
+          category={categoryId}
+          productType={productTypeId}
+          supplier={supplierId}
         />
         {cardItems.map(({ id, icon, label, values }) => {
           return (
