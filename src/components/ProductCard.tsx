@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import type React from "react";
 import { Button } from "./Button";
+import { useState } from "react";
+import CreateEditProduct from "../layouts/CreateEditProduct";
 
 interface ICardItem {
   id: number;
@@ -63,6 +65,15 @@ export default function ProductCard({
   supplierId = 0,
   productTypeId = 0,
 }: CardProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleIsOpen = () => {
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
   const cardItems: ICardItem[] = [
     {
       id: 1,
@@ -121,13 +132,14 @@ export default function ProductCard({
         <div className="flex space-x-2">
           <Button
             variant="ghost"
-            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            className="p-2 text-primary-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+            onClick={handleIsOpen}
           >
             <SquarePen strokeWidth={1} size={20} className="h-4 w-4" />
           </Button>
           <Button
             variant="ghost"
-            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            className="p-2 text-error-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
           >
             <Trash2 strokeWidth={1} size={20} className="h-4 w-4" />
           </Button>
@@ -135,6 +147,11 @@ export default function ProductCard({
       </div>
       <div className="text-sm break-words my-2 mx-2">{description}</div>
       <div className="space-y-3 flex-grow overflow-auto">
+        <CreateEditProduct
+          isOpen={isOpen}
+          onClose={handleClose}
+          title="Edit Product"
+        />
         {cardItems.map(({ id, icon, label, values }) => {
           return (
             <div className="flex justify-between" key={id}>

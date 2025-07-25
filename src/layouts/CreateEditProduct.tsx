@@ -1,6 +1,7 @@
 import { Button } from "../components/Button";
 
 type createEditProductProps = {
+  title?: string;
   name?: string;
   stock?: number;
   description?: string;
@@ -16,12 +17,13 @@ type createEditProductProps = {
 export default function CreateEditProduct({
   onClose,
   isOpen = false,
+  title = "Product",
 }: createEditProductProps) {
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-50 flex justify-center items-center bg-neutral-500 bg-opacity-50">
       <div className=" bg-white rounded-lg p-5 xs:mx-2">
-        <h1 className="text-lg font-semibold">Producto</h1>
+        <h1 className="text-lg font-semibold">{title}</h1>
         <div className="flex justify-between my-2">
           <h1 className="text-base text-neutral-800 w-full">Nombre</h1>
           <h1 className="text-base text-neutral-800 w-full">Stock</h1>

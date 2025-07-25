@@ -44,7 +44,11 @@ export default function Product() {
         />
       </div>
       <div className="flex-wrap pt-4 xs:flex-row md:lg:flex md:lg:flex-col justify-start">
-        <CreateEditProduct isOpen={isOpen} onClose={handleClose} />
+        <CreateEditProduct
+          isOpen={isOpen}
+          onClose={handleClose}
+          title="Create Product"
+        />
         {filteredProducts.length === 0 ? (
           <h1 className="mt-4 text-gray-600">No Hay Productos</h1>
         ) : (
