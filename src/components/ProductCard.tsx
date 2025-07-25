@@ -14,7 +14,8 @@ import type React from "react";
 import { Button } from "./Button";
 
 interface ICardItem {
-  icon: React.ReactNode;
+  id: number;
+  icon: React.ReactElement;
   label: string;
   values: string | number;
 }
@@ -34,14 +35,20 @@ type CardProps = {
 
 const formatDate = (dataString: string) => {
   if (!dataString) return "N/A";
-  const options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  };
-  return new Date(dataString).toLocaleDateString("es-ES", options);
+  const date = new Date(dataString);
+  try {
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    const formattedDate = date.toLocaleDateString("es-ES", options);
+    return typeof formattedDate === "string" ? formattedDate : "N/A";
+  } catch {
+    return "N/A";
+  }
 };
 
 export default function ProductCard({
@@ -58,36 +65,43 @@ export default function ProductCard({
 }: CardProps) {
   const cardItems: ICardItem[] = [
     {
+      id: 1,
       icon: <Layers size={16} strokeWidth={1.5} />,
       label: "Stock:",
       values: stock,
     },
     {
+      id: 2,
       icon: <DollarSign size={16} strokeWidth={1.5} />,
       label: "Precio De compra:",
       values: buyPrice,
     },
     {
+      id: 3,
       icon: <BarChart2 size={16} strokeWidth={1.5} />,
       label: "Precio De Venta:",
       values: salePrice,
     },
     {
+      id: 4,
       icon: <Tag size={16} strokeWidth={1.5} />,
       label: "Tipo:",
       values: productTypeId,
     },
     {
+      id: 5,
       icon: <Truck size={16} strokeWidth={1.5} />,
       label: "Provedor:",
       values: supplierId,
     },
     {
+      id: 6,
       icon: <Calendar size={16} strokeWidth={1.5} />,
       label: "Creado:",
       values: formatDate(createdDate),
     },
     {
+      id: 7,
       icon: <Clock size={16} strokeWidth={1.5} />,
       label: "Actualizado:",
       values: formatDate(updatedDate),
@@ -104,28 +118,26 @@ export default function ProductCard({
           <p className="text-base font-bold break-words max-w-24">{name}</p>
           <p className="text-sm text-neutral-500">{categoryId}</p>
         </div>
-        <div className="flex flex-grow overflow-auto">
-          <Button variant="ghost" className="hover:bg-primary-200 p-2">
-            <SquarePen
-              strokeWidth={1}
-              size={20}
-              className="mr-2 text-neutral-600 hover:text-primary-500"
-            />
+        <div className="flex space-x-2">
+          <Button
+            variant="ghost"
+            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+          >
+            <SquarePen strokeWidth={1} size={20} className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" className="hover:!bg-error-200 p-2">
-            <Trash2
-              strokeWidth={1}
-              size={20}
-              className="mr-2 text-neutral-600 hover:text-error-600"
-            />
+          <Button
+            variant="ghost"
+            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+          >
+            <Trash2 strokeWidth={1} size={20} className="h-4 w-4" />
           </Button>
         </div>
       </div>
       <div className="text-sm break-words my-2 mx-2">{description}</div>
       <div className="space-y-3 flex-grow overflow-auto">
-        {cardItems.map(({ icon, label, values }) => {
+        {cardItems.map(({ id, icon, label, values }) => {
           return (
-            <div className="flex justify-between">
+            <div className="flex justify-between" key={id}>
               <div className="flex flex-row flex-grow items-center space-x-2">
                 {icon}
                 <p className="text-neutral-500">{label}</p>
