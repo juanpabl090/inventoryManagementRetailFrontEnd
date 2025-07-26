@@ -13,7 +13,8 @@
     "@material-tailwind/react": "^3.0.0-beta.24",
     "lucide-react": "^0.525.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-router": "^7.7.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",

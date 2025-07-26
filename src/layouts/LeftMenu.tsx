@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../components/Button";
+import { Link } from "react-router";
 
 interface menuItem {
   icon: LucideIcon;
@@ -28,33 +29,33 @@ export default function LeftMenu() {
     },
     {
       icon: FolderOpen,
-      label: "categories",
+      label: "Categories",
     },
     {
       icon: Tag,
-      label: "productTypes",
+      label: "ProductTypes",
     },
     {
       icon: Truck,
-      label: "suppliers",
+      label: "Suppliers",
     },
     {
       icon: ShoppingCart,
-      label: "purchases",
+      label: "Purchases",
     },
     {
       icon: TrendingUp,
-      label: "sales",
+      label: "Sales",
     },
     {
       icon: BarChart3,
-      label: "reports",
+      label: "Reports",
     },
   ];
 
   const handlePage = (label: string) => {
+    setOpen(false);
     setActiveItem(label);
-    console.log(label);
   };
 
   return (
@@ -71,24 +72,26 @@ export default function LeftMenu() {
       >
         <div className="h-full px-5 py-4 overflow-y-auto">
           <ul className="space-y-2 font-medium">
-            {menuItems.map(({ icon: Icon, label }) => (
-              <li key={label}>
-                <a
-                  href="#"
-                  onClick={() => handlePage(label)}
-                  className={`flex items-center py-2 text-gray-900 rounded-lg group ${
-                    ActiveItem === label
-                      ? "bg-primary-50 border border-primary-200 hover:bg-primary-200 text-primary-500 font-bold"
-                      : "text-gray-900 hover:bg-gray-200 "
-                  }`}
-                >
-                  <span className="mr-4">
-                    <Icon strokeWidth={ActiveItem === label ? 2 : 1} />
-                  </span>
-                  <span className="ms-3">{label}</span>
-                </a>
-              </li>
-            ))}
+            {menuItems.map(({ icon: Icon, label }) => {
+              return (
+                <li key={label}>
+                  <Link
+                    to={label}
+                    onClick={() => handlePage(label)}
+                    className={`flex items-center py-2 text-gray-900 rounded-lg group ${
+                      ActiveItem === label
+                        ? "bg-primary-50 border border-primary-200 hover:bg-primary-200 text-primary-500 font-bold"
+                        : "text-gray-900 hover:bg-gray-200 "
+                    }`}
+                  >
+                    <span className="mr-4">
+                      <Icon strokeWidth={ActiveItem ? 2 : 1} />
+                    </span>
+                    <span className="ms-3">{label}</span>
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </aside>
