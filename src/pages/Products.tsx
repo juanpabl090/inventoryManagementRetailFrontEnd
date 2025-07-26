@@ -8,7 +8,7 @@ import mocks from "../mocks/productMock.json";
 import { type Product } from "../types/types";
 import { Plus } from "lucide-react";
 
-export default function Product() {
+export default function Products() {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(mocks);
   const [isOpen, setIsOpen] = useState(false);
 
