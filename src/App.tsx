@@ -1,6 +1,6 @@
+import AppRoute from "./router/AppRoutes";
 import LeftMenu from "./layouts/LeftMenu";
 import Nav from "./layouts/Nav";
-import Product from "./pages/Product";
 
 import "./styles/styles.css";
 
@@ -15,7 +15,7 @@ export default function App() {
           <LeftMenu />
         </div>
         <main className="flex flex-col overflow-auto bg-neutral-100 w-screen p-5">
-          <Product />
+          <AppRoute />
         </main>
       </div>
     </div>
