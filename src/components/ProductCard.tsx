@@ -145,7 +145,11 @@ export default function ProductCard({
           </Button>
         </div>
       </div>
-      <div className="text-sm break-words my-2 mx-2">{description}</div>
+      <div className="text-sm my-2 mx-2 max-w-80 min-w-0">
+        <p className="break-keep">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit
+        </p>
+      </div>
       <div className="space-y-3 flex-grow overflow-auto">
         <CreateEditProduct
           isOpen={isOpen}
