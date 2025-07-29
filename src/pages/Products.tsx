@@ -1,24 +1,77 @@
-import { useState } from "react";
-import ProductCard from "../components/ProductCard";
-import SearchBox from "../components/SearchBox";
+import { useEffect, useState } from "react";
+import { ProductCard, SearchBox, Button } from "../components/index";
 import CreateEditProduct from "../layouts/CreateEditProduct";
-import { Button } from "../components/Button";
-
-import mocks from "../mocks/productMock.json";
 import { type Product } from "../types/types";
 import { Plus } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+const api_url = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+api_url.interceptors.request.use((config) => {
+  config.headers.Authorization = localStorage.getItem("API_KEY_JWT");
+  return config;
+});
+
+const fetchProducts = async (): Promise<Product[]> => {
+  const res = await api_url.get("/products/get");
+  return res.data;
+};
 
 export default function Products() {
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>(mocks);
+  const { data, error, isLoading } = useQuery<Product[], Error>({
+    queryKey: ["products"],
+    queryFn: fetchProducts,
+  });
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+  useEffect(() => {
+    if (data) {
+      setFilteredProducts(data);
+    }
+  }, [data]);
 
-  const handleIsOpen = () => {
-    setIsOpen(true);
+  const handleClose = () => setIsOpen(false);
+
+  const handleIsOpen = () => setIsOpen(true);
+
+  const showProducts = (filteredProducts: Product[]) => {
+    return filteredProducts.length === 0 ? (
+      <h1 className="mt-4 text-gray-600">No Hay Productos</h1>
+    ) : (
+      filteredProducts.map((card) => (
+        <ProductCard
+          key={card.id}
+          name={card.name}
+          description={card.description}
+          categoryId={card.categoryId}
+          stock={card.stock}
+          salePrice={card.salePrice}
+          buyPrice={card.buyPrice}
+          productTypeId={card.productTypeId}
+          supplierId={card.supplierId}
+          updatedDate={card.updatedDate}
+          createdDate={card.createdDate}
+        />
+      ))
+    );
   };
+  if (isLoading)
+    return (
+      <div className="text-2xl text-neutral-900 font-semibold">Cargando</div>
+    );
+  if (error)
+    return (
+      <div className="text-2xl text-neutral-900 font-semibold">
+        {error.message}
+      </div>
+    );
 
   return (
     <div>
@@ -38,7 +91,7 @@ export default function Products() {
       </div>
       <div>
         <SearchBox<Product>
-          data={mocks}
+          data={data ?? []}
           onResults={setFilteredProducts}
           extractName={(item) => item.name}
         />
@@ -49,25 +102,7 @@ export default function Products() {
           onClose={handleClose}
           title="Create Product"
         />
-        {filteredProducts.length === 0 ? (
-          <h1 className="mt-4 text-gray-600">No Hay Productos</h1>
-        ) : (
-          filteredProducts.map((card) => (
-            <ProductCard
-              key={card.id}
-              name={card.name}
-              description={card.description}
-              categoryId={card.categoryId}
-              stock={card.stock}
-              salePrice={card.salePrice}
-              buyPrice={card.buyPrice}
-              productTypeId={card.productTypeId}
-              supplierId={card.supplierId}
-              updatedDate={card.updatedDate}
-              createdDate={card.createdDate}
-            />
-          ))
-        )}
+        {showProducts(filteredProducts)}
       </div>
     </div>
   );
