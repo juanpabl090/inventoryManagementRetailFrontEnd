@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 mocks
+.env
 *.local
 
 # Editor directories and files

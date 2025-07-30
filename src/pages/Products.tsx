@@ -1,24 +1,64 @@
-import { useState } from "react";
-import ProductCard from "../components/ProductCard";
-import SearchBox from "../components/SearchBox";
+import { useEffect, useState } from "react";
+import { ProductCard, SearchBox, Button } from "../components/index";
 import CreateEditProduct from "../layouts/CreateEditProduct";
-import { Button } from "../components/Button";
-
-import mocks from "../mocks/productMock.json";
 import { type Product } from "../types/types";
 import { Plus } from "lucide-react";
+import useFetch from "../hooks/useFetch";
 
 export default function Products() {
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>(mocks);
+  const token = "";
+  const { data, error, isLoading } = useFetch<Product>({
+    JWT: token,
+    method: "get",
+    model: "product",
+    path: "/products/get",
+  });
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+  useEffect(() => {
+    if (data) {
+      setFilteredProducts(data);
+    }
+  }, [data]);
 
-  const handleIsOpen = () => {
-    setIsOpen(true);
+  const handleClose = () => setIsOpen(false);
+
+  const handleIsOpen = () => setIsOpen(true);
+
+  const showProducts = (filteredProducts: Product[]) => {
+    return filteredProducts.length === 0 ? (
+      <h1 className="mt-4 text-gray-600">No Hay Productos</h1>
+    ) : (
+      filteredProducts.map((card) => (
+        <ProductCard
+          key={card.id}
+          name={card.name}
+          description={card.description}
+          categoryId={card.categoryId}
+          stock={card.stock}
+          salePrice={card.salePrice}
+          buyPrice={card.buyPrice}
+          productTypeId={card.productTypeId}
+          supplierId={card.supplierId}
+          updatedDate={card.updatedDate}
+          createdDate={card.createdDate}
+        />
+      ))
+    );
   };
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
+        <p className="text-center">Cargando</p>
+      </div>
+    );
+  if (error)
+    return (
+      <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
+        <p className="text-center">{error.message}</p>
+      </div>
+    );
 
   return (
     <div>
@@ -38,7 +78,7 @@ export default function Products() {
       </div>
       <div>
         <SearchBox<Product>
-          data={mocks}
+          data={data ?? []}
           onResults={setFilteredProducts}
           extractName={(item) => item.name}
         />
@@ -49,25 +89,7 @@ export default function Products() {
           onClose={handleClose}
           title="Create Product"
         />
-        {filteredProducts.length === 0 ? (
-          <h1 className="mt-4 text-gray-600">No Hay Productos</h1>
-        ) : (
-          filteredProducts.map((card) => (
-            <ProductCard
-              key={card.id}
-              name={card.name}
-              description={card.description}
-              categoryId={card.categoryId}
-              stock={card.stock}
-              salePrice={card.salePrice}
-              buyPrice={card.buyPrice}
-              productTypeId={card.productTypeId}
-              supplierId={card.supplierId}
-              updatedDate={card.updatedDate}
-              createdDate={card.createdDate}
-            />
-          ))
-        )}
+        {showProducts(filteredProducts)}
       </div>
     </div>
   );
