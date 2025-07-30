@@ -7,6 +7,7 @@ import {
   Purchases,
   Sales,
   Reports,
+  NotFound,
 } from "../pages/index";
 
 export default function AppRoute() {
@@ -20,6 +21,7 @@ export default function AppRoute() {
       <Route path="/Purchases" element={<Purchases />} />
       <Route path="/Sales" element={<Sales />} />
       <Route path="/Reports" element={<Reports />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
