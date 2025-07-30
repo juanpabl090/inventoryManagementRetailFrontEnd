@@ -6,7 +6,7 @@ import { Plus } from "lucide-react";
 import useFetch from "../hooks/useFetch";
 
 export default function Products() {
-  const token = "";
+  const token = import.meta.env.VITE_JWT_TOKEN;
   const { data, error, isLoading } = useFetch<Product>({
     JWT: token,
     method: "get",
