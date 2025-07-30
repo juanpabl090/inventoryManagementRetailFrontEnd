@@ -3,30 +3,16 @@ import { ProductCard, SearchBox, Button } from "../components/index";
 import CreateEditProduct from "../layouts/CreateEditProduct";
 import { type Product } from "../types/types";
 import { Plus } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-
-const api_url = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-api_url.interceptors.request.use((config) => {
-  config.headers.Authorization = localStorage.getItem("API_KEY_JWT");
-  return config;
-});
-
-const fetchProducts = async (): Promise<Product[]> => {
-  const res = await api_url.get("/products/get");
-  return res.data;
-};
+import useFetch from "../hooks/useFetch";
 
 export default function Products() {
-  const { data, error, isLoading } = useQuery<Product[], Error>({
-    queryKey: ["products"],
-    queryFn: fetchProducts,
+  const token =
+    "{{JWT_TOKEN}}";
+  const { data, error, isLoading } = useFetch<Product>({
+    JWT: token,
+    method: "get",
+    model: "product",
+    path: "/products/get",
   });
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -64,12 +50,14 @@ export default function Products() {
   };
   if (isLoading)
     return (
-      <div className="text-2xl text-neutral-900 font-semibold">Cargando</div>
+      <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
+        <p className="text-center">Cargando</p>
+      </div>
     );
   if (error)
     return (
-      <div className="text-2xl text-neutral-900 font-semibold">
-        {error.message}
+      <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
+        <p className="text-center">{error.message}</p>
       </div>
     );
 
