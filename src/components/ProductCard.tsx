@@ -74,59 +74,78 @@ export default function ProductCard({
   const handleClose = () => {
     setIsOpen(false);
   };
-  const cardItems: ICardItem[] = [
+
+  const handleNameStyle = (name: string) => {
+    const nameArray: string[] = name.split("_");
+    let newName: string = "";
+    nameArray.forEach((_, index) => {
+      newName += ` ${nameArray.at(index)}`;
+    });
+    return newName;
+  };
+
+  const cardItemsValues: ICardItem[] = [
     {
       id: 1,
-      icon: <Layers size={16} strokeWidth={1.5} />,
+      icon: <Layers size={16} className="text-neutral-500" color="#10b981" />,
       label: "Stock:",
       values: stock,
     },
     {
       id: 2,
-      icon: <DollarSign size={16} strokeWidth={1.5} />,
-      label: "Precio De compra:",
+      icon: (
+        <DollarSign size={16} className="text-neutral-500" color="#3b82f6" />
+      ),
+      label: "compra:",
       values: buyPrice,
     },
     {
       id: 3,
-      icon: <BarChart2 size={16} strokeWidth={1.5} />,
-      label: "Precio De Venta:",
+      icon: (
+        <BarChart2 size={16} className="text-neutral-500" color="#3b82f6" />
+      ),
+      label: "Venta:",
       values: salePrice,
     },
     {
       id: 4,
-      icon: <Tag size={16} strokeWidth={1.5} />,
+      icon: <Tag size={16} className="text-neutral-500" color="#f97316" />,
       label: "Tipo:",
       values: productTypeId,
     },
     {
       id: 5,
-      icon: <Truck size={16} strokeWidth={1.5} />,
+      icon: <Truck size={16} className="text-neutral-500" color="#ff2056" />,
       label: "Provedor:",
       values: supplierId,
     },
+  ];
+
+  const cardItemsDates: ICardItem[] = [
     {
       id: 6,
-      icon: <Calendar size={16} strokeWidth={1.5} />,
+      icon: <Calendar size={20} className="text-neutral-500" color="#8e51ff" />,
       label: "Creado:",
       values: formatDate(createdDate),
     },
     {
       id: 7,
-      icon: <Clock size={16} strokeWidth={1.5} />,
+      icon: <Clock size={20} className="text-neutral-500" color="#fd9a00" />,
       label: "Actualizado:",
       values: formatDate(updatedDate),
     },
   ];
 
   return (
-    <div className="flex flex-col m-1 bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+    <div className="flex flex-col m-1 bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow lg:w-96 animate-slide-in">
       <div className="flex items-start justify-between">
-        <div className="flex justify-center items-center bg-primary-100 h-10 w-10 rounded-md">
+        <div className="flex justify-center items-center bg-primary-100 h-10 w-10 rounded-2xl">
           <Package className="text-primary-500 h-6 w-6" />
         </div>
         <div className="px-2 flex-grow min-w-0">
-          <p className="text-base font-bold break-words max-w-24">{name}</p>
+          <p className="text-base font-bold break-words max-w-full">
+            {handleNameStyle(name)}
+          </p>
           <p className="text-sm text-neutral-500">{categoryId}</p>
         </div>
         <div className="flex space-x-2">
@@ -146,9 +165,7 @@ export default function ProductCard({
         </div>
       </div>
       <div className="text-sm my-2 mx-2 max-w-80 min-w-0">
-        <p className="break-keep">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit
-        </p>
+        <p className="break-keep">{description}</p>
       </div>
       <div className="space-y-3 flex-grow overflow-auto">
         <CreateEditProduct
@@ -164,17 +181,39 @@ export default function ProductCard({
           productType={productTypeId}
           supplier={supplierId}
         />
-        {cardItems.map(({ id, icon, label, values }) => {
-          return (
-            <div className="flex justify-between" key={id}>
-              <div className="flex flex-row flex-grow items-center space-x-2">
-                {icon}
-                <p className="text-neutral-500">{label}</p>
-              </div>
-              <p className="text-neutral-900 break-words">{values}</p>
-            </div>
-          );
-        })}
+        {/* contenedor superior */}
+        <div>
+          <div className="grid grid-cols-2 gap-y-4 w-full mb-2">
+            {cardItemsValues.map(({ id, icon, label, values }) => {
+              return (
+                <div className="flex w-full" key={id}>
+                  <div className="flex items-center m-2">{icon}</div>
+                  <div className="flex flex-col">
+                    <p className="text-neutral-500">{label}</p>
+                    <p className="font-bold">{values}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <hr className="border-spacing-1 border-neutral-300" />
+          {/* contenedor inferior*/}
+          <div className="grid grid-cols-1 gap-y-4 w-full mt-2">
+            {cardItemsDates.map(({ id, icon, label, values }) => {
+              return (
+                <div className="flex flex-col justify-between" key={id}>
+                  <div className="flex w-full">
+                    <div className="flex items-center m-2">{icon}</div>
+                    <div className="flex flex-col ml-2">
+                      <p className="text-neutral-500">{label}</p>
+                      <p className="font-bold">{values}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );
