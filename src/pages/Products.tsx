@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { ProductCard, SearchBox, Button } from "../components/index";
+import { ProductCard } from "../components/index";
 import CreateEditProduct from "../layouts/CreateEditProduct";
 import { type Product } from "../types/types";
-import { Plus } from "lucide-react";
 import useFetch from "../hooks/useFetch";
+import PageHeader from "../layouts/PageHeader";
 
 export default function Products() {
   const token = import.meta.env.VITE_JWT_TOKEN;
@@ -62,27 +62,15 @@ export default function Products() {
 
   return (
     <div>
-      <div className="flex justify-between items-center w-full pb-4">
-        <div className="flex flex-col gap-0">
-          <h1 className="text-neutral-950 text-2xl font-bold">
-            Gestión de Productos
-          </h1>
-          <p>Administra el catálogo de productos de tu empresa</p>
-        </div>
-        <div>
-          <Button variant="solid" className="flex mr-5" onClick={handleIsOpen}>
-            <Plus className="mr-3" />
-            Nuevo Producto
-          </Button>
-        </div>
-      </div>
-      <div>
-        <SearchBox<Product>
-          data={data ?? []}
-          onResults={setFilteredProducts}
-          extractName={(item) => item.name}
-        />
-      </div>
+      <PageHeader
+        title="Gestión de Productos"
+        description="Administra el catálogo de productos de tu empresa"
+        data={data ?? []}
+        onResults={setFilteredProducts}
+        extractName={(item) => item.name}
+        handleIsOpen={handleIsOpen}
+        buttonLabel="Nuevo Producto"
+      />
       <div className="flex-wrap pt-4 xs:flex-row md:lg:flex md:lg:flex-col justify-start">
         <CreateEditProduct
           isOpen={isOpen}
