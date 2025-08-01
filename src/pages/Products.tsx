@@ -2,17 +2,11 @@ import { useEffect, useState } from "react";
 import { ProductCard } from "../components/index";
 import CreateEditProduct from "../layouts/CreateEditProduct";
 import { type Product } from "../types/types";
-import useFetch from "../hooks/useFetch";
+import useProducts from "../hooks/products/useProducts";
 import PageHeader from "../layouts/PageHeader";
 
 export default function Products() {
-  const token = import.meta.env.VITE_JWT_TOKEN;
-  const { data, error, isLoading } = useFetch<Product>({
-    JWT: token,
-    method: "get",
-    model: "product",
-    path: "/products/get",
-  });
+  const { data, error, isLoading } = useProducts<Product>();
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -33,6 +27,7 @@ export default function Products() {
       filteredProducts.map((card) => (
         <ProductCard
           key={card.id}
+          id={card.id}
           name={card.name}
           description={card.description}
           categoryId={card.categoryId}
@@ -62,7 +57,7 @@ export default function Products() {
 
   return (
     <div>
-      <PageHeader
+      <PageHeader<Product>
         title="Gestión de Productos"
         description="Administra el catálogo de productos de tu empresa"
         data={data ?? []}
@@ -76,6 +71,7 @@ export default function Products() {
           isOpen={isOpen}
           onClose={handleClose}
           title="Create Product"
+          onSubmit={(e) => console.log(e)}
         />
         {showProducts(filteredProducts)}
       </div>

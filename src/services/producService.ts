@@ -1,25 +1,23 @@
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 
 const path = "/products/get";
 
-export const getProduct = (JWT: string) => {
-  axios.get(path, {
-    headers: { Authorization: `Bearer ${JWT}` },
-  });
+export const getProduct = async () => {
+  const res = await axiosInstance.get(path);
+  return res.data;
 };
-export const getProductById = (JWT: string, id: number) => {
-  axios.get(`${path}/id/${id}`, {
-    headers: { Authorization: `Bearer ${JWT}` },
-  });
+export const getProductById = async (id: number) => {
+  const res = await axiosInstance.get(`${path}/id/${id}`);
+  return res.data;
 };
-export const getProductByName = (JWT: string, name: string) => {
-  axios.get(`${path}/name/${name}`, {
-    headers: { Authorization: `Bearer ${JWT}` },
-  });
+export const getProductByName = async (name: string) => {
+  const res = await axiosInstance.get(`${path}/name/${name}`);
+  return res.data;
 };
 
-export const getProductTypeName = (JWT: string, productTypeName: string) => {
-  axios.get(`${path}/productTypeName/${productTypeName}`, {
-    headers: { Authorization: `Bearer ${JWT}` },
-  });
+export const getProductTypeName = async (productTypeName: string) => {
+  const res = await axiosInstance.get(
+    `${path}/productTypeName/${productTypeName}`
+  );
+  return res.data;
 };

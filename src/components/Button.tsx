@@ -7,6 +7,7 @@ type ButtonProps = {
   className?: string;
   variant?: "solid" | "outline" | "ghost";
   size?: "sm" | "md" | "lg";
+  type: "submit" | "button" | "reset" | undefined;
 };
 
 export const Button = ({
@@ -15,6 +16,7 @@ export const Button = ({
   className = "",
   variant = "solid",
   size = "md",
+  type = "submit",
 }: ButtonProps) => {
   // Configuración de estilos base
   const baseClasses =
@@ -37,6 +39,7 @@ export const Button = ({
   return (
     <button
       onClick={onClick}
+      type={type}
       className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
     >
       {children}
