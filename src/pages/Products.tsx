@@ -4,17 +4,55 @@ import CreateEditProduct from "../layouts/CreateEditProduct";
 import { type Product } from "../types/types";
 import useProducts from "../hooks/products/useProducts";
 import PageHeader from "../layouts/PageHeader";
+import usePostProducts from "../hooks/products/usePostProducts";
 
 export default function Products() {
-  const { data, error, isLoading } = useProducts<Product>();
+  const {
+    data: products,
+    error: productsError,
+    isLoading: productsLoading,
+  } = useProducts<Product>();
+  const {
+    error: postProductError,
+    isPending: postProductPeding,
+    isSuccess: postProductSucces,
+    mutate: postProduct,
+  } = usePostProducts();
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    if (data) {
-      setFilteredProducts(data);
+    if (products) {
+      setFilteredProducts(products);
     }
-  }, [data]);
+    if (postProductSucces) {
+      setIsOpen(false);
+    }
+  }, [products, postProductSucces]);
+  
+  if (productsLoading || postProductPeding) {
+    return (
+      <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
+        <p className="text-center">Cargando</p>
+      </div>
+    );
+  }
+  if (productsError) {
+    return (
+      <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
+        <p className="text-center">
+          {productsError.message || postProductError?.message}
+        </p>
+      </div>
+    );
+  }
+  if (postProductError) {
+    return (
+      <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
+        <p className="text-center">{postProductError?.message}</p>
+      </div>
+    );
+  }
 
   const handleClose = () => setIsOpen(false);
 
@@ -42,25 +80,13 @@ export default function Products() {
       ))
     );
   };
-  if (isLoading)
-    return (
-      <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
-        <p className="text-center">Cargando</p>
-      </div>
-    );
-  if (error)
-    return (
-      <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
-        <p className="text-center">{error.message}</p>
-      </div>
-    );
 
   return (
     <div>
       <PageHeader<Product>
         title="Gestión de Productos"
         description="Administra el catálogo de productos de tu empresa"
-        data={data ?? []}
+        data={products ?? []}
         onResults={setFilteredProducts}
         extractName={(item) => item.name}
         handleIsOpen={handleIsOpen}
@@ -71,7 +97,7 @@ export default function Products() {
           isOpen={isOpen}
           onClose={handleClose}
           title="Create Product"
-          onSubmit={(e) => console.log(e)}
+          onSubmit={postProduct}
         />
         {showProducts(filteredProducts)}
       </div>

@@ -28,7 +28,12 @@ export default function PageHeader<T>({
           <p>{description}</p>
         </div>
         <div>
-          <Button variant="solid" className="flex mr-5" onClick={handleIsOpen}>
+          <Button
+            type="button"
+            variant="solid"
+            className="flex mr-5"
+            onClick={handleIsOpen}
+          >
             <Plus className="mr-3" />
             {buttonLabel}
           </Button>

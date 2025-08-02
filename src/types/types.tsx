@@ -6,8 +6,8 @@ export interface Product {
   buyPrice: number;
   salePrice: number;
   stock: number;
-  createdDate: string;
-  updatedDate: string;
+  createdDate?: string;
+  updatedDate?: string;
   supplierId: number;
   productTypeId: number;
 }
