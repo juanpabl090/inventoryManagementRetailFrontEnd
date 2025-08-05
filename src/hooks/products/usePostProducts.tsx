@@ -10,10 +10,10 @@ export default function usePostProducts() {
     Error,
     Product
   >({
-    mutationKey: ["Product"],
+    mutationKey: ["postProduct"],
     mutationFn: add,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["product"] });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
     },
   });
 

@@ -35,6 +35,7 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
       const productToSend =
         propValues.id !== undefined ? { ...values, id: propValues.id } : values;
       propValues.onSubmit(productToSend as Product);
+      formik.resetForm();
     },
   });
   if (!propValues.isOpen) return null;

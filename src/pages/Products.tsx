@@ -5,19 +5,21 @@ import { type Product } from "../types/types";
 import useProducts from "../hooks/products/useProducts";
 import PageHeader from "../layouts/PageHeader";
 import usePostProducts from "../hooks/products/usePostProducts";
+import useDeleteProducts from "../hooks/products/useDeleteProducts";
 
 export default function Products() {
   const {
     data: products,
     error: productsError,
     isLoading: productsLoading,
-  } = useProducts<Product>();
+  } = useProducts();
   const {
     error: postProductError,
-    isPending: postProductPeding,
     isSuccess: postProductSucces,
     mutate: postProduct,
   } = usePostProducts();
+  const { error: deleteProductsError, mutate: deleteProduct } =
+    useDeleteProducts();
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -25,31 +27,31 @@ export default function Products() {
     if (products) {
       setFilteredProducts(products);
     }
+  }, [products]);
+
+  useEffect(() => {
     if (postProductSucces) {
       setIsOpen(false);
     }
-  }, [products, postProductSucces]);
-  
-  if (productsLoading || postProductPeding) {
-    return (
-      <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
-        <p className="text-center">Cargando</p>
-      </div>
-    );
-  }
-  if (productsError) {
+  }, [postProductSucces]);
+
+  if (productsError || postProductError || deleteProductsError) {
     return (
       <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
         <p className="text-center">
-          {productsError.message || postProductError?.message}
+          Hubo Un error:
+          {productsError?.message ||
+            postProductError?.message ||
+            deleteProductsError?.message}
         </p>
       </div>
     );
   }
-  if (postProductError) {
+
+  if (productsLoading) {
     return (
       <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
-        <p className="text-center">{postProductError?.message}</p>
+        <p className="text-center">Cargando</p>
       </div>
     );
   }
@@ -76,6 +78,9 @@ export default function Products() {
           supplierId={card.supplierId}
           updatedDate={card.updatedDate}
           createdDate={card.createdDate}
+          onClick={() => {
+            if (card.id !== undefined) deleteProduct(card.id);
+          }}
         />
       ))
     );

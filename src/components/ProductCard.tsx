@@ -35,6 +35,7 @@ type CardProps = {
   updatedDate?: string;
   supplierId?: number;
   productTypeId?: number;
+  onClick: () => void;
 };
 
 const formatDate = (dataString: string) => {
@@ -67,6 +68,7 @@ export default function ProductCard({
   updatedDate = "",
   supplierId = 0,
   productTypeId = 0,
+  onClick,
 }: CardProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -170,6 +172,7 @@ export default function ProductCard({
             type="button"
             variant="ghost"
             className="p-2 text-error-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            onClick={onClick}
           >
             <Trash2 strokeWidth={1} size={20} className="h-4 w-4" />
           </Button>

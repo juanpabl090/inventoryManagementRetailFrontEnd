@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { getProduct } from "../../services/producService";
+import type { Product } from "../../types/types";
 
-export default function useProducts<Product>() {
+export default function useProducts() {
   const { data, error, isLoading } = useQuery<Product[], Error>({
-    queryKey: ["product"],
+    queryKey: ["products"],
     queryFn: getProduct,
   });
 
