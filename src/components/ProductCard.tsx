@@ -15,6 +15,7 @@ import type React from "react";
 import { Button } from "./Button";
 import { useState } from "react";
 import CreateEditProduct from "../layouts/CreateEditProduct";
+import type { Product } from "../types/types";
 
 interface ICardItem {
   id: number;
@@ -35,6 +36,7 @@ type CardProps = {
   updatedDate?: string;
   supplierId?: number;
   productTypeId?: number;
+  onSubmit: (product: Product, onSuccess: () => void) => void;
   onClick: () => void;
 };
 
@@ -68,9 +70,16 @@ export default function ProductCard({
   updatedDate = "",
   supplierId = 0,
   productTypeId = 0,
+  onSubmit,
   onClick,
 }: CardProps) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleEdit = (updateProduct: Product) => {
+    onSubmit(updateProduct, () => {
+      setIsOpen(false);
+    });
+  };
 
   const handleIsOpen = () => {
     setIsOpen(true);
@@ -78,15 +87,6 @@ export default function ProductCard({
 
   const handleClose = () => {
     setIsOpen(false);
-  };
-
-  const handleNameStyle = (name: string) => {
-    const nameArray: string[] = name.split("_");
-    let newName: string = "";
-    nameArray.forEach((_, index) => {
-      newName += ` ${nameArray.at(index)}`;
-    });
-    return newName;
   };
 
   const cardItemsValues: ICardItem[] = [
@@ -154,9 +154,7 @@ export default function ProductCard({
           <Package className="text-primary-500 h-6 w-6" />
         </div>
         <div className="px-2 flex-grow min-w-0">
-          <p className="text-base font-bold break-words max-w-full">
-            {handleNameStyle(name)}
-          </p>
+          <p className="text-base font-bold break-words max-w-full">{name}</p>
           <p className="text-sm text-neutral-500">{id}</p>
         </div>
         <div className="flex space-x-2">
@@ -183,7 +181,7 @@ export default function ProductCard({
       </div>
       <div className="space-y-3 flex-grow overflow-auto">
         <CreateEditProduct
-          onSubmit={(e) => console.log(e)}
+          onSubmit={handleEdit}
           isOpen={isOpen}
           onClose={handleClose}
           title="Edit Product"

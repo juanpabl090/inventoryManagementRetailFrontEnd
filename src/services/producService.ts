@@ -49,3 +49,23 @@ export const deleteById = async (id: number): Promise<void> => {
     }
   }
 };
+
+export const updatePatchProductByName = async (
+  product: Product
+): Promise<Product> => {
+  const name = product.name;
+  try {
+    const res = await axiosInstance.patch(
+      `${path}/update/name/${name}`,
+      product
+    );
+    return res.data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      throw new Error(
+        error?.response?.data || "No se pudo actualizar el producto"
+      );
+    }
+    throw new Error("Error desconocido al actualizar el producto" + error);
+  }
+};

@@ -56,7 +56,6 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
           <input
             className="min-h-10 rounded-lg outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 w-full pl-2 mr-2 border border-neutral-900"
             placeholder={propValues.name === "" ? "" : propValues.name}
-            disabled={!!propValues.name}
             value={formik.values.name}
             onChange={(e) => formik.setFieldValue("name", e.target.value)}
           />
@@ -87,7 +86,6 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
             placeholder={
               propValues.description === "" ? "" : propValues.description
             }
-            disabled={!!propValues.description}
             value={formik.values.description}
             onChange={(e) =>
               formik.setFieldValue("description", e.target.value)
@@ -141,13 +139,12 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
           <select
             className="min-h-10 rounded-lg outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 w-full pl-2 mr-2 border border-neutral-900"
             name="categoryId"
-            disabled={!!propValues.categoryId}
             value={formik.values.categoryId}
             onChange={(e) =>
               formik.setFieldValue("categoryId", Number(e.target.value))
             }
           >
-            <option value={0} disabled hidden>
+            <option value={0} hidden>
               {propValues.categoryId === 0
                 ? "Elige una categoria"
                 : propValues.categoryId}
@@ -158,13 +155,12 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
           </select>
           <select
             className="min-h-10 rounded-lg outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 w-full pl-2 mr-2 border border-neutral-900"
-            disabled={!!propValues.productTypeId}
             value={formik.values.productTypeId}
             onChange={(e) =>
               formik.setFieldValue("productTypeId", Number(e.target.value))
             }
           >
-            <option value={0} disabled hidden>
+            <option value={0} hidden>
               {propValues.productTypeId === 0
                 ? "Elige una categoria"
                 : propValues.productTypeId}
@@ -175,13 +171,12 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
           </select>
           <select
             className="min-h-10 rounded-lg outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 w-full pl-2 mr-2 border border-neutral-900"
-            disabled={!!propValues.supplierId}
             value={formik.values.supplierId}
             onChange={(e) =>
               formik.setFieldValue("supplierId", Number(e.target.value))
             }
           >
-            <option value={0} disabled hidden>
+            <option value={0} hidden>
               {propValues.supplierId
                 ? "Elige una categoria"
                 : propValues.supplierId}

@@ -2,24 +2,29 @@ import { useEffect, useState } from "react";
 import { ProductCard } from "../components/index";
 import CreateEditProduct from "../layouts/CreateEditProduct";
 import { type Product } from "../types/types";
-import useProducts from "../hooks/products/useProducts";
 import PageHeader from "../layouts/PageHeader";
-import usePostProducts from "../hooks/products/usePostProducts";
-import useDeleteProducts from "../hooks/products/useDeleteProducts";
+import {
+  useDeleteProducts,
+  usePatchProductsByName,
+  usePostProducts,
+  useProducts,
+} from "../hooks/products/index";
 
 export default function Products() {
   const {
     data: products,
-    error: productsError,
-    isLoading: productsLoading,
+    error: productError,
+    isLoading: productLoading,
   } = useProducts();
   const {
     error: postProductError,
     isSuccess: postProductSucces,
     mutate: postProduct,
   } = usePostProducts();
-  const { error: deleteProductsError, mutate: deleteProduct } =
+  const { error: deleteProductError, mutate: deleteProduct } =
     useDeleteProducts();
+  const { error: patchProductError, mutate: patchProduct } =
+    usePatchProductsByName();
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -35,20 +40,34 @@ export default function Products() {
     }
   }, [postProductSucces]);
 
-  if (productsError || postProductError || deleteProductsError) {
+  const handlePatch = (product: Product, onSuccess: () => void) => {
+    patchProduct(product, {
+      onSuccess: () => {
+        onSuccess();
+      },
+    });
+  };
+
+  if (
+    productError ||
+    postProductError ||
+    deleteProductError ||
+    patchProductError
+  ) {
     return (
       <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
         <p className="text-center">
           Hubo Un error:
-          {productsError?.message ||
+          {productError?.message ||
             postProductError?.message ||
-            deleteProductsError?.message}
+            deleteProductError?.message ||
+            patchProductError?.message}
         </p>
       </div>
     );
   }
 
-  if (productsLoading) {
+  if (productLoading) {
     return (
       <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
         <p className="text-center">Cargando</p>
@@ -81,6 +100,7 @@ export default function Products() {
           onClick={() => {
             if (card.id !== undefined) deleteProduct(card.id);
           }}
+          onSubmit={handlePatch}
         />
       ))
     );
