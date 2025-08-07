@@ -2,25 +2,78 @@ import { useEffect, useState } from "react";
 import { ProductCard } from "../components/index";
 import CreateEditProduct from "../layouts/CreateEditProduct";
 import { type Product } from "../types/types";
-import useFetch from "../hooks/useFetch";
 import PageHeader from "../layouts/PageHeader";
+import {
+  useDeleteProducts,
+  usePatchProductsByName,
+  usePostProducts,
+  useProducts,
+} from "../hooks/products/index";
 
 export default function Products() {
-  const token = import.meta.env.VITE_JWT_TOKEN;
-  const { data, error, isLoading } = useFetch<Product>({
-    JWT: token,
-    method: "get",
-    model: "product",
-    path: "/products/get",
-  });
+  const {
+    data: products,
+    error: productError,
+    isLoading: productLoading,
+  } = useProducts();
+  const {
+    error: postProductError,
+    isSuccess: postProductSucces,
+    mutate: postProduct,
+  } = usePostProducts();
+  const { error: deleteProductError, mutate: deleteProduct } =
+    useDeleteProducts();
+  const { error: patchProductError, mutate: patchProduct } =
+    usePatchProductsByName();
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    if (data) {
-      setFilteredProducts(data);
+    if (products) {
+      setFilteredProducts(products);
     }
-  }, [data]);
+  }, [products]);
+
+  useEffect(() => {
+    if (postProductSucces) {
+      setIsOpen(false);
+    }
+  }, [postProductSucces]);
+
+  const handlePatch = (product: Product, onSuccess: () => void) => {
+    patchProduct(product, {
+      onSuccess: () => {
+        onSuccess();
+      },
+    });
+  };
+
+  if (
+    productError ||
+    postProductError ||
+    deleteProductError ||
+    patchProductError
+  ) {
+    return (
+      <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
+        <p className="text-center">
+          Hubo Un error:
+          {productError?.message ||
+            postProductError?.message ||
+            deleteProductError?.message ||
+            patchProductError?.message}
+        </p>
+      </div>
+    );
+  }
+
+  if (productLoading) {
+    return (
+      <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
+        <p className="text-center">Cargando</p>
+      </div>
+    );
+  }
 
   const handleClose = () => setIsOpen(false);
 
@@ -33,6 +86,7 @@ export default function Products() {
       filteredProducts.map((card) => (
         <ProductCard
           key={card.id}
+          id={card.id}
           name={card.name}
           description={card.description}
           categoryId={card.categoryId}
@@ -43,29 +97,21 @@ export default function Products() {
           supplierId={card.supplierId}
           updatedDate={card.updatedDate}
           createdDate={card.createdDate}
+          onClick={() => {
+            if (card.id !== undefined) deleteProduct(card.id);
+          }}
+          onSubmit={handlePatch}
         />
       ))
     );
   };
-  if (isLoading)
-    return (
-      <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
-        <p className="text-center">Cargando</p>
-      </div>
-    );
-  if (error)
-    return (
-      <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
-        <p className="text-center">{error.message}</p>
-      </div>
-    );
 
   return (
     <div>
-      <PageHeader
+      <PageHeader<Product>
         title="Gestión de Productos"
         description="Administra el catálogo de productos de tu empresa"
-        data={data ?? []}
+        data={products ?? []}
         onResults={setFilteredProducts}
         extractName={(item) => item.name}
         handleIsOpen={handleIsOpen}
@@ -76,6 +122,7 @@ export default function Products() {
           isOpen={isOpen}
           onClose={handleClose}
           title="Create Product"
+          onSubmit={postProduct}
         />
         {showProducts(filteredProducts)}
       </div>

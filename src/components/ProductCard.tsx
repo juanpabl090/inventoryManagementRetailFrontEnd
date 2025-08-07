@@ -9,11 +9,13 @@ import {
   Calendar,
   Clock,
   SquarePen,
+  Grid3x3,
 } from "lucide-react";
 import type React from "react";
 import { Button } from "./Button";
 import { useState } from "react";
 import CreateEditProduct from "../layouts/CreateEditProduct";
+import type { Product } from "../types/types";
 
 interface ICardItem {
   id: number;
@@ -23,6 +25,7 @@ interface ICardItem {
 }
 
 type CardProps = {
+  id?: number;
   name?: string;
   description?: string;
   categoryId?: number;
@@ -33,6 +36,8 @@ type CardProps = {
   updatedDate?: string;
   supplierId?: number;
   productTypeId?: number;
+  onSubmit: (product: Product, onSuccess: () => void) => void;
+  onClick: () => void;
 };
 
 const formatDate = (dataString: string) => {
@@ -54,6 +59,7 @@ const formatDate = (dataString: string) => {
 };
 
 export default function ProductCard({
+  id,
   name = "",
   description = "",
   categoryId = 0,
@@ -64,8 +70,16 @@ export default function ProductCard({
   updatedDate = "",
   supplierId = 0,
   productTypeId = 0,
+  onSubmit,
+  onClick,
 }: CardProps) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleEdit = (updateProduct: Product) => {
+    onSubmit(updateProduct, () => {
+      setIsOpen(false);
+    });
+  };
 
   const handleIsOpen = () => {
     setIsOpen(true);
@@ -73,15 +87,6 @@ export default function ProductCard({
 
   const handleClose = () => {
     setIsOpen(false);
-  };
-
-  const handleNameStyle = (name: string) => {
-    const nameArray: string[] = name.split("_");
-    let newName: string = "";
-    nameArray.forEach((_, index) => {
-      newName += ` ${nameArray.at(index)}`;
-    });
-    return newName;
   };
 
   const cardItemsValues: ICardItem[] = [
@@ -119,17 +124,23 @@ export default function ProductCard({
       label: "Provedor:",
       values: supplierId,
     },
+    {
+      id: 6,
+      icon: <Grid3x3 size={16} className="text-neutral-500" color="#d946ef" />,
+      label: "Categoria:",
+      values: categoryId,
+    },
   ];
 
   const cardItemsDates: ICardItem[] = [
     {
-      id: 6,
+      id: 7,
       icon: <Calendar size={20} className="text-neutral-500" color="#8e51ff" />,
       label: "Creado:",
       values: formatDate(createdDate),
     },
     {
-      id: 7,
+      id: 8,
       icon: <Clock size={20} className="text-neutral-500" color="#fd9a00" />,
       label: "Actualizado:",
       values: formatDate(updatedDate),
@@ -143,13 +154,12 @@ export default function ProductCard({
           <Package className="text-primary-500 h-6 w-6" />
         </div>
         <div className="px-2 flex-grow min-w-0">
-          <p className="text-base font-bold break-words max-w-full">
-            {handleNameStyle(name)}
-          </p>
-          <p className="text-sm text-neutral-500">{categoryId}</p>
+          <p className="text-base font-bold break-words max-w-full">{name}</p>
+          <p className="text-sm text-neutral-500">{id}</p>
         </div>
         <div className="flex space-x-2">
           <Button
+            type="button"
             variant="ghost"
             className="p-2 text-primary-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
             onClick={handleIsOpen}
@@ -157,8 +167,10 @@ export default function ProductCard({
             <SquarePen strokeWidth={1} size={20} className="h-4 w-4" />
           </Button>
           <Button
+            type="button"
             variant="ghost"
             className="p-2 text-error-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            onClick={onClick}
           >
             <Trash2 strokeWidth={1} size={20} className="h-4 w-4" />
           </Button>
@@ -169,17 +181,19 @@ export default function ProductCard({
       </div>
       <div className="space-y-3 flex-grow overflow-auto">
         <CreateEditProduct
+          onSubmit={handleEdit}
           isOpen={isOpen}
           onClose={handleClose}
           title="Edit Product"
+          id={id}
           name={name}
           stock={stock}
           description={description}
           buyPrice={buyPrice}
           salePrice={salePrice}
-          category={categoryId}
-          productType={productTypeId}
-          supplier={supplierId}
+          categoryId={categoryId}
+          productTypeId={productTypeId}
+          supplierId={supplierId}
         />
         {/* contenedor superior */}
         <div>

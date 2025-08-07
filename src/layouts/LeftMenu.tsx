@@ -60,7 +60,7 @@ export default function LeftMenu() {
 
   return (
     <div className="h-full">
-      <Button className="md:hidden fixed top-4 right-4 z-40 p-2 rounded-md bg-neutral-50 dark:bg-gray-700">
+      <Button type="button" className="md:hidden fixed top-4 right-4 z-40 p-2 rounded-md bg-neutral-50 dark:bg-gray-700">
         <Menu onClick={() => setOpen(!open)} strokeWidth={1} />
       </Button>
       <aside

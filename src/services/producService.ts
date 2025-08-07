@@ -1,25 +1,71 @@
-import axios from "axios";
+import { isAxiosError } from "axios";
+import type { Product } from "../types/types";
+import axiosInstance from "../utils/axiosInstance";
 
-const path = "/products/get";
+const path = "/products";
 
-export const getProduct = (JWT: string) => {
-  axios.get(path, {
-    headers: { Authorization: `Bearer ${JWT}` },
-  });
+export const getProduct = async () => {
+  const res = await axiosInstance.get(`${path}/get`);
+  return res.data;
 };
-export const getProductById = (JWT: string, id: number) => {
-  axios.get(`${path}/id/${id}`, {
-    headers: { Authorization: `Bearer ${JWT}` },
-  });
+export const getProductById = async (id: number) => {
+  const res = await axiosInstance.get(`${path}/id/${id}`);
+  return res.data;
 };
-export const getProductByName = (JWT: string, name: string) => {
-  axios.get(`${path}/name/${name}`, {
-    headers: { Authorization: `Bearer ${JWT}` },
-  });
+export const getProductByName = async (name: string) => {
+  const res = await axiosInstance.get(`${path}/name/${name}`);
+  return res.data;
 };
 
-export const getProductTypeName = (JWT: string, productTypeName: string) => {
-  axios.get(`${path}/productTypeName/${productTypeName}`, {
-    headers: { Authorization: `Bearer ${JWT}` },
-  });
+export const getProductTypeName = async (productTypeName: string) => {
+  const res = await axiosInstance.get(
+    `${path}/productTypeName/${productTypeName}`
+  );
+  return res.data;
+};
+
+export const add = async (product: Product): Promise<Product> => {
+  try {
+    const res = await axiosInstance.post<Product>(`${path}/add`, product);
+    return res.data;
+  } catch (error: unknown) {
+    if (isAxiosError(error)) {
+      throw new Error(error.response?.data || "No se pudo agregar el producto");
+    } else {
+      console.error("Error desconocido al agregar producto:", error);
+      throw new Error("No se pudo agregar el producto");
+    }
+  }
+};
+
+export const deleteById = async (id: number): Promise<void> => {
+  try {
+    await axiosInstance.delete(`${path}/delete/id/${id}`);
+  } catch (error) {
+    if (isAxiosError(error)) {
+      throw new Error(
+        error?.response?.data || "No se pudo eliminar el producto"
+      );
+    }
+  }
+};
+
+export const updatePatchProductByName = async (
+  product: Product
+): Promise<Product> => {
+  const name = product.name;
+  try {
+    const res = await axiosInstance.patch(
+      `${path}/update/name/${name}`,
+      product
+    );
+    return res.data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      throw new Error(
+        error?.response?.data || "No se pudo actualizar el producto"
+      );
+    }
+    throw new Error("Error desconocido al actualizar el producto" + error);
+  }
 };
