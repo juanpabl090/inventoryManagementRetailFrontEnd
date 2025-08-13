@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updatePatchProductByName } from "../../services/producService";
-import type { Product } from "../../types/types";
+import type { Product } from "../../types/models/types";
 
 export function usePatchProductsByName() {
   const queryClient = useQueryClient();

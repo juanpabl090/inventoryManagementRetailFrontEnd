@@ -1,10 +1,17 @@
 import AppRoute from "./router/AppRoutes";
+import "./styles/styles.css";
 import LeftMenu from "./layouts/LeftMenu";
 import Nav from "./layouts/Nav";
-
-import "./styles/styles.css";
+import { AuthContext } from "./context/authContext";
+import { useContext } from "react";
 
 export default function App() {
+  const auth = useContext(AuthContext);
+
+  if (!auth?.accessToken) {
+    return <AppRoute />;
+  }
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <div className="w-full">

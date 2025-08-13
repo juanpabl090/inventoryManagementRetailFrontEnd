@@ -15,7 +15,7 @@ import type React from "react";
 import { Button } from "./Button";
 import { useState } from "react";
 import CreateEditProduct from "../layouts/CreateEditProduct";
-import type { Product } from "../types/types";
+import type { Product } from "../types/models/types";
 
 interface ICardItem {
   id: number;

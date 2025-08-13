@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ProductCard } from "../components/index";
 import CreateEditProduct from "../layouts/CreateEditProduct";
-import { type Product } from "../types/types";
+import { type Product } from "../types/models/types";
 import PageHeader from "../layouts/PageHeader";
 import {
   useDeleteProducts,

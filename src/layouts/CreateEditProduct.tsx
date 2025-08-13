@@ -1,5 +1,5 @@
 import { Button } from "../components/Button";
-import type { Product } from "../types/types";
+import type { Product } from "../types/models/types";
 import { useFormik } from "formik";
 
 type createEditProductProps = {
