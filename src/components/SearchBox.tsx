@@ -47,7 +47,6 @@ export default function SearchBox<T>({
 
   const handleHistoryClick = (term: string) => {
     setQuery(term);
-    console.log(term);
     const filtered = data.filter((item) =>
       extractName(item).toLowerCase().includes(term.toLowerCase())
     );
@@ -61,6 +60,7 @@ export default function SearchBox<T>({
         className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
       />
       <input
+        name="searchBox"
         className="w-11/12 peer z-10 px-6 py-4 rounded-xl outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 pl-10"
         placeholder="| Buscabas Algo?"
         value={query}
