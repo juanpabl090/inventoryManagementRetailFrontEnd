@@ -1,5 +1,5 @@
 import { Button } from "../components/Button";
-import type { Product } from "../types/types";
+import type { Product } from "../types/models/types";
 import { useFormik } from "formik";
 
 type createEditProductProps = {
@@ -45,21 +45,33 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
       <div className=" bg-white rounded-lg p-5 xs:mx-2">
         <h1 className="text-lg font-semibold">{propValues.title}</h1>
         <div className="flex justify-between my-2">
-          <label htmlFor="name" className="text-base text-neutral-800 w-full">
+          <label
+            htmlFor="product-name"
+            className="text-base text-neutral-800 w-full"
+          >
             Nombre
           </label>
-          <label htmlFor="stock" className="text-base text-neutral-800 w-full">
+          <label
+            htmlFor="product-stock"
+            className="text-base text-neutral-800 w-full"
+          >
             Stock
           </label>
         </div>
         <div className="flex justify-between my-2">
           <input
+            id="product-name"
+            name="name"
+            autoComplete="name"
             className="min-h-10 rounded-lg outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 w-full pl-2 mr-2 border border-neutral-900"
             placeholder={propValues.name === "" ? "" : propValues.name}
             value={formik.values.name}
             onChange={(e) => formik.setFieldValue("name", e.target.value)}
           />
           <input
+            id="product-stock"
+            name="stock"
+            autoComplete="off"
             className="min-h-10 rounded-lg outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 w-full pl-2 mr-2 border border-neutral-900 "
             type="number"
             placeholder={
@@ -76,12 +88,18 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
         </div>
 
         <div className="flex justify-between my-2">
-          <label className="text-base text-neutral-800 w-full">
+          <label
+            htmlFor="product-description"
+            className="text-base text-neutral-800 w-full"
+          >
             Descripcion
           </label>
         </div>
         <div className="flex justify-between my-2">
           <textarea
+            id="product-description"
+            name="description"
+            autoComplete="off"
             className="min-h-10 h-auto rounded-lg outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 w-full border border-neutral-900"
             placeholder={
               propValues.description === "" ? "" : propValues.description
@@ -94,15 +112,24 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
         </div>
 
         <div className="flex justify-between my-2">
-          <label className="text-base text-neutral-800 w-full">
+          <label
+            htmlFor="product-buyPrice"
+            className="text-base text-neutral-800 w-full"
+          >
             Precio de Compra
           </label>
-          <label className="text-base text-neutral-800 w-full">
+          <label
+            htmlFor="product-salePrice"
+            className="text-base text-neutral-800 w-full"
+          >
             Precio de Venta
           </label>
         </div>
         <div className="flex justify-between my-2">
           <input
+            id="product-buyPrice"
+            name="buyPrice"
+            autoComplete="off"
             className="min-h-10 rounded-lg outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 w-full pl-2 mr-2 border border-neutral-900 "
             type="number"
             placeholder={
@@ -115,6 +142,9 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
             }
           />
           <input
+            id="product-salePrice"
+            name="salePrice"
+            autoComplete="off"
             className="min-h-10 rounded-lg outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 w-full pl-2 mr-2 border border-neutral-900 "
             type="number"
             placeholder={
@@ -129,16 +159,31 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
         </div>
 
         <div className="flex justify-between my-2">
-          <label className="text-base text-neutral-800 w-full">Categoria</label>
-          <label className="text-base text-neutral-800 w-full">
+          <label
+            htmlFor="product-categoryId"
+            className="text-base text-neutral-800 w-full"
+          >
+            Categoria
+          </label>
+          <label
+            htmlFor="product-productTypeId"
+            className="text-base text-neutral-800 w-full"
+          >
             Tipo de Producto
           </label>
-          <label className="text-base text-neutral-800 w-full">Proverdor</label>
+          <label
+            htmlFor="product-supplierId"
+            className="text-base text-neutral-800 w-full"
+          >
+            Proverdor
+          </label>
         </div>
         <div className="flex justify-between my-2">
           <select
-            className="min-h-10 rounded-lg outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 w-full pl-2 mr-2 border border-neutral-900"
+            id="product-categoryId"
             name="categoryId"
+            autoComplete="off"
+            className="min-h-10 rounded-lg outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 w-full pl-2 mr-2 border border-neutral-900"
             value={formik.values.categoryId}
             onChange={(e) =>
               formik.setFieldValue("categoryId", Number(e.target.value))
@@ -154,6 +199,9 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
             <option value={8}>3d_printers</option>
           </select>
           <select
+            id="product-productTypeId"
+            name="productTypeId"
+            autoComplete="off"
             className="min-h-10 rounded-lg outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 w-full pl-2 mr-2 border border-neutral-900"
             value={formik.values.productTypeId}
             onChange={(e) =>
@@ -170,6 +218,9 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
             <option value={3}>drone</option>
           </select>
           <select
+            id="product-supplierId"
+            name="supplierId"
+            autoComplete="off"
             className="min-h-10 rounded-lg outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 w-full pl-2 mr-2 border border-neutral-900"
             value={formik.values.supplierId}
             onChange={(e) =>

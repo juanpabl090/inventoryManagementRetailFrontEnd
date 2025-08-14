@@ -6,3 +6,4 @@ export { default as Sales } from "./Sales";
 export { default as Purchases } from "./Purchases";
 export { default as Suppliers } from "./Suppliers";
 export { default as NotFound } from "./NotFound";
+export { default as Login } from "./auth/Login";

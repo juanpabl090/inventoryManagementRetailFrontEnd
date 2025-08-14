@@ -8,10 +8,12 @@ import {
   BarChart3,
   type LucideIcon,
   Menu,
+  LogOut,
 } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button } from "../components/Button";
 import { Link } from "react-router";
+import { AuthContext } from "../context/authContext";
 
 interface menuItem {
   icon: LucideIcon;
@@ -21,6 +23,7 @@ interface menuItem {
 export default function LeftMenu() {
   const [open, setOpen] = useState<boolean | boolean>(false);
   const [ActiveItem, setActiveItem] = useState<string>("");
+  const auth = useContext(AuthContext);
 
   const menuItems: menuItem[] = [
     {
@@ -58,9 +61,16 @@ export default function LeftMenu() {
     setActiveItem(label);
   };
 
+  const handleLogOut = () => {
+    auth?.logout();
+  };
+
   return (
     <div className="h-full">
-      <Button type="button" className="md:hidden fixed top-4 right-4 z-40 p-2 rounded-md bg-neutral-50 dark:bg-gray-700">
+      <Button
+        type="button"
+        className="md:hidden fixed top-4 right-4 z-40 p-2 rounded-md bg-neutral-50 dark:bg-gray-700"
+      >
         <Menu onClick={() => setOpen(!open)} strokeWidth={1} />
       </Button>
       <aside
@@ -92,6 +102,19 @@ export default function LeftMenu() {
                 </li>
               );
             })}
+          </ul>
+          <ul className="space-y-2 font-medium">
+            <li
+              onClick={handleLogOut}
+              className="text-gray-900 hover:bg-gray-200"
+            >
+              <div className="flex items-center py-2 rounded-lg group">
+                <span className="mr-4">
+                  <LogOut strokeWidth={1} />
+                </span>
+                <span className="ms-3">Log Out</span>
+              </div>
+            </li>
           </ul>
         </div>
       </aside>

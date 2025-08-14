@@ -1,11 +1,13 @@
 import { isAxiosError } from "axios";
-import type { Product } from "../types/types";
+import type { Product } from "../types/models/types";
 import axiosInstance from "../utils/axiosInstance";
+
+import { API_PATHS } from "../constants/apiPaths";
 
 const path = "/products";
 
 export const getProduct = async () => {
-  const res = await axiosInstance.get(`${path}/get`);
+  const res = await axiosInstance.get(API_PATHS.PRODUCTS.GET);
   return res.data;
 };
 export const getProductById = async (id: number) => {
@@ -26,7 +28,10 @@ export const getProductTypeName = async (productTypeName: string) => {
 
 export const add = async (product: Product): Promise<Product> => {
   try {
-    const res = await axiosInstance.post<Product>(`${path}/add`, product);
+    const res = await axiosInstance.post<Product>(
+      API_PATHS.PRODUCTS.ADD,
+      product
+    );
     return res.data;
   } catch (error: unknown) {
     if (isAxiosError(error)) {
@@ -40,7 +45,7 @@ export const add = async (product: Product): Promise<Product> => {
 
 export const deleteById = async (id: number): Promise<void> => {
   try {
-    await axiosInstance.delete(`${path}/delete/id/${id}`);
+    await axiosInstance.delete(API_PATHS.PRODUCTS.DELETE_BY_ID(id));
   } catch (error) {
     if (isAxiosError(error)) {
       throw new Error(
@@ -56,7 +61,7 @@ export const updatePatchProductByName = async (
   const name = product.name;
   try {
     const res = await axiosInstance.patch(
-      `${path}/update/name/${name}`,
+      API_PATHS.PRODUCTS.UPDATE_PATCH_PRODUCT_BY_NAME(name),
       product
     );
     return res.data;
