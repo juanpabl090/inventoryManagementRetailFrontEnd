@@ -1,7 +1,7 @@
 import { Button } from "../components/Button";
 import type {
   Category,
-  Product,
+  ProductRequest,
   ProductType,
   Supplier,
 } from "../types/models/types";
@@ -20,7 +20,7 @@ type createEditProductProps = {
   productType?: ProductType;
   onClose: () => void;
   isOpen?: boolean;
-  onSubmit: (product: Product) => void;
+  onSubmit: (product: ProductRequest) => void;
 };
 
 export default function CreateEditProduct(propValues: createEditProductProps) {
@@ -39,7 +39,7 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
     onSubmit: (values) => {
       const productToSend =
         propValues.id !== undefined ? { ...values, id: propValues.id } : values;
-      propValues.onSubmit(productToSend as Product);
+      propValues.onSubmit(productToSend);
       formik.resetForm();
     },
   });

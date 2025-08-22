@@ -12,18 +12,16 @@ export interface Product {
   productType: ProductType;
 }
 
-export interface ProductAdd {
+export interface ProductRequest {
   id?: number;
   name: string;
   description: string;
-  category: number;
+  categoryId: number;
   buyPrice: number;
   salePrice: number;
   stock: number;
-  createdDate?: string;
-  updatedDate?: string;
-  supplier: number;
-  productType: number;
+  supplierId: number;
+  productTypeId: number;
 }
 
 export interface Category {
