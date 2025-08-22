@@ -1,6 +1,6 @@
 export const API_PATHS = {
   URL: {
-    BASE: "http://localhost:8081"
+    BASE: "http://localhost:8081",
   },
   AUTH: {
     BASE: "/auth",
@@ -9,6 +9,7 @@ export const API_PATHS = {
   PRODUCTS: {
     BASE: "/products",
     GET: "/products/get",
+    ALL: "/products/all",
     ADD: "/products/add",
     DELETE_BY_ID: (id: number) => `/products/delete/id/${id}`,
     UPDATE_PATCH_PRODUCT_BY_NAME: (name: string) =>

@@ -2,66 +2,75 @@ export interface Product {
   id?: number;
   name: string;
   description: string;
-  categoryId: number;
+  category: Category;
   buyPrice: number;
   salePrice: number;
   stock: number;
   createdDate?: string;
   updatedDate?: string;
+  supplier: Supplier;
+  productType: ProductType;
+}
+
+export interface ProductRequest {
+  id?: number;
+  name: string;
+  description: string;
+  categoryId: number;
+  buyPrice: number;
+  salePrice: number;
+  stock: number;
   supplierId: number;
   productTypeId: number;
 }
 
 export interface Category {
-  id: string;
+  id?: number;
   name: string;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface ProductType {
-  id: string;
+  id?: number;
   name: string;
-  createdAt: Date;
-  updatedAt: Date;
+  products?: Product[];
 }
 
 export interface Supplier {
-  id: string;
+  id?: number;
+  name: string;
+  contact?: Contact;
+}
+
+export interface Contact {
+  id?: number;
   name: string;
   email: string;
   phone: string;
   address: string;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface Purchase {
-  id: string;
-  productId: string;
-  supplierId: string;
+  id?: number;
+  productId: string | Product;
+  supplierId: string | Supplier;
   quantity: number;
   totalAmount: number;
   date: Date;
-  createdAt: Date;
 }
 
 export interface Sale {
-  id: string;
-  totalAmount: number;
+  id?: number;
   date: Date;
-  details: SaleDetail[];
-  createdAt: Date;
+  amount: number;
 }
 
 export interface SaleDetail {
   id: string;
-  saleId: string;
-  productId: string;
-  quantity: number;
-  unitPrice: number;
+  saleId: string | Sale;
+  productId: string | Product;
+  amount: number;
   discount: number;
-  subtotal: number;
+  quantity: number;
 }
 
 export type ActiveTab =

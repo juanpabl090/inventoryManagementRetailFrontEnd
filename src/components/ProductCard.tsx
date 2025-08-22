@@ -15,7 +15,12 @@ import type React from "react";
 import { Button } from "./Button";
 import { useState } from "react";
 import CreateEditProduct from "../layouts/CreateEditProduct";
-import type { Product } from "../types/models/types";
+import type {
+  Category,
+  Product,
+  ProductType,
+  Supplier,
+} from "../types/models/types";
 
 interface ICardItem {
   id: number;
@@ -28,14 +33,14 @@ type CardProps = {
   id?: number;
   name?: string;
   description?: string;
-  categoryId?: number;
+  category?: Category;
   buyPrice?: number;
   salePrice?: number;
   stock?: number;
   createdDate?: string;
   updatedDate?: string;
-  supplierId?: number;
-  productTypeId?: number;
+  supplier?: Supplier;
+  productType?: ProductType;
   onSubmit: (product: Product, onSuccess: () => void) => void;
   onClick: () => void;
 };
@@ -62,14 +67,14 @@ export default function ProductCard({
   id,
   name = "",
   description = "",
-  categoryId = 0,
+  category = { id: 0, name: "" },
   buyPrice = 0,
   salePrice = 0,
   stock = 0,
   createdDate = "",
   updatedDate = "",
-  supplierId = 0,
-  productTypeId = 0,
+  supplier = { id: 0, name: "" },
+  productType = { id: 0, name: "" },
   onSubmit,
   onClick,
 }: CardProps) {
@@ -87,6 +92,14 @@ export default function ProductCard({
 
   const handleClose = () => {
     setIsOpen(false);
+  };
+
+  type Displayable = number | { name?: string | undefined } | undefined;
+  const getDisplayName = (entity: Displayable): string => {
+    if (typeof entity === "number") return String(entity);
+    if (entity && typeof entity.name === "string" && entity.name.trim() !== "")
+      return entity.name;
+    return "N/A";
   };
 
   const cardItemsValues: ICardItem[] = [
@@ -116,19 +129,19 @@ export default function ProductCard({
       id: 4,
       icon: <Tag size={16} className="text-neutral-500" color="#f97316" />,
       label: "Tipo:",
-      values: productTypeId,
+      values: getDisplayName(productType),
     },
     {
       id: 5,
       icon: <Truck size={16} className="text-neutral-500" color="#ff2056" />,
       label: "Provedor:",
-      values: supplierId,
+      values: getDisplayName(supplier),
     },
     {
       id: 6,
       icon: <Grid3x3 size={16} className="text-neutral-500" color="#d946ef" />,
       label: "Categoria:",
-      values: categoryId,
+      values: getDisplayName(category),
     },
   ];
 
@@ -191,9 +204,9 @@ export default function ProductCard({
           description={description}
           buyPrice={buyPrice}
           salePrice={salePrice}
-          categoryId={categoryId}
-          productTypeId={productTypeId}
-          supplierId={supplierId}
+          category={category}
+          productType={productType}
+          supplier={supplier}
         />
         {/* contenedor superior */}
         <div>

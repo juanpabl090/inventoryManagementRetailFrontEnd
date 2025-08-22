@@ -1,5 +1,10 @@
 import { Button } from "../components/Button";
-import type { Product } from "../types/models/types";
+import type {
+  Category,
+  ProductRequest,
+  ProductType,
+  Supplier,
+} from "../types/models/types";
 import { useFormik } from "formik";
 
 type createEditProductProps = {
@@ -7,15 +12,15 @@ type createEditProductProps = {
   id?: number;
   name?: string;
   description?: string;
-  categoryId?: number;
+  category?: Category;
   buyPrice?: number;
   salePrice?: number;
   stock?: number;
-  supplierId?: number;
-  productTypeId?: number;
+  supplier?: Supplier;
+  productType?: ProductType;
   onClose: () => void;
   isOpen?: boolean;
-  onSubmit: (product: Product) => void;
+  onSubmit: (product: ProductRequest) => void;
 };
 
 export default function CreateEditProduct(propValues: createEditProductProps) {
@@ -23,18 +28,18 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
     initialValues: {
       name: propValues.name || "",
       description: propValues.description || "",
-      categoryId: propValues.categoryId || 0,
+      categoryId: propValues.category?.id || 0,
       buyPrice: propValues.buyPrice || 0,
       salePrice: propValues.salePrice || 0,
       stock: propValues.stock || 0,
-      supplierId: propValues.supplierId || 0,
-      productTypeId: propValues.productTypeId || 0,
+      supplierId: propValues.supplier?.id || 0,
+      productTypeId: propValues.productType?.id || 0,
     },
     enableReinitialize: true,
     onSubmit: (values) => {
       const productToSend =
         propValues.id !== undefined ? { ...values, id: propValues.id } : values;
-      propValues.onSubmit(productToSend as Product);
+      propValues.onSubmit(productToSend);
       formik.resetForm();
     },
   });
@@ -190,9 +195,9 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
             }
           >
             <option value={0} hidden>
-              {propValues.categoryId === 0
+              {propValues.category?.id === 0
                 ? "Elige una categoria"
-                : propValues.categoryId}
+                : propValues.category?.id}
             </option>
             <option value={6}>keyboards</option>
             <option value={7}>robotics</option>
@@ -209,9 +214,9 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
             }
           >
             <option value={0} hidden>
-              {propValues.productTypeId === 0
+              {propValues.productType?.id === 0
                 ? "Elige una categoria"
-                : propValues.productTypeId}
+                : propValues.productType?.id}
             </option>
             <option value={1}>tablet</option>
             <option value={2}>gaming_console</option>
@@ -228,9 +233,9 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
             }
           >
             <option value={0} hidden>
-              {propValues.supplierId
+              {propValues.supplier
                 ? "Elige una categoria"
-                : propValues.supplierId}
+                : propValues.supplier}
             </option>
             <option value={15}>raspberry_pi</option>
             <option value={16}>arduino</option>

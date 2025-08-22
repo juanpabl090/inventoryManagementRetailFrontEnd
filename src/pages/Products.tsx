@@ -83,26 +83,28 @@ export default function Products() {
     return filteredProducts.length === 0 ? (
       <h1 className="mt-4 text-gray-600">No Hay Productos</h1>
     ) : (
-      filteredProducts.map((card) => (
-        <ProductCard
-          key={card.id}
-          id={card.id}
-          name={card.name}
-          description={card.description}
-          categoryId={card.categoryId}
-          stock={card.stock}
-          salePrice={card.salePrice}
-          buyPrice={card.buyPrice}
-          productTypeId={card.productTypeId}
-          supplierId={card.supplierId}
-          updatedDate={card.updatedDate}
-          createdDate={card.createdDate}
-          onClick={() => {
-            if (card.id !== undefined) deleteProduct(card.id);
-          }}
-          onSubmit={handlePatch}
-        />
-      ))
+      filteredProducts.map((card) => {
+        return (
+          <ProductCard
+            key={card.id}
+            id={card.id}
+            name={card.name}
+            description={card.description}
+            category={card.category}
+            stock={card.stock}
+            salePrice={card.salePrice}
+            buyPrice={card.buyPrice}
+            productType={card.productType}
+            supplier={card.supplier}
+            updatedDate={card.updatedDate}
+            createdDate={card.createdDate}
+            onClick={() => {
+              if (card.id !== undefined) deleteProduct(card.id);
+            }}
+            onSubmit={handlePatch}
+          />
+        );
+      })
     );
   };
 
