@@ -15,12 +15,8 @@ import type React from "react";
 import { Button } from "./Button";
 import { useState } from "react";
 import CreateEditProduct from "../layouts/CreateEditProduct";
-import type {
-  Category,
-  Product,
-  ProductType,
-  Supplier,
-} from "../types/models/types";
+import type { Category, ProductType, Supplier } from "../types/models/index";
+import type { ProductRequest } from "../types/models/Product";
 
 interface ICardItem {
   id: number;
@@ -41,7 +37,7 @@ type CardProps = {
   updatedDate?: string;
   supplier?: Supplier;
   productType?: ProductType;
-  onSubmit: (product: Product, onSuccess: () => void) => void;
+  onSubmit: (product: ProductRequest, onSuccess: () => void) => void;
   onClick: () => void;
 };
 
@@ -80,7 +76,7 @@ export default function ProductCard({
 }: CardProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleEdit = (updateProduct: Product) => {
+  const handleEdit = (updateProduct: ProductRequest) => {
     onSubmit(updateProduct, () => {
       setIsOpen(false);
     });

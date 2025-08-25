@@ -1,5 +1,9 @@
 import { isAxiosError } from "axios";
-import type { Product, ProductRequest } from "../types/models/types";
+import type {
+  ProductResponse,
+  ProductRequest,
+  Product,
+} from "../types/models/index";
 import axiosInstance from "../utils/axiosInstance";
 
 import { API_PATHS } from "../constants/apiPaths";
@@ -11,7 +15,7 @@ export const getProduct = async () => {
   return res.data;
 };
 
-export const getAll = async () => {
+export const getAll = async (): Promise<Product[]> => {
   const res = await axiosInstance.get(API_PATHS.PRODUCTS.ALL);
   return res.data;
 };
@@ -32,9 +36,11 @@ export const getProductTypeName = async (productTypeName: string) => {
   return res.data;
 };
 
-export const add = async (product: ProductRequest): Promise<Product> => {
+export const add = async (
+  product: ProductRequest
+): Promise<ProductResponse> => {
   try {
-    const res = await axiosInstance.post<Product>(
+    const res = await axiosInstance.post<ProductResponse>(
       API_PATHS.PRODUCTS.ADD,
       product
     );
@@ -62,8 +68,8 @@ export const deleteById = async (id: number): Promise<void> => {
 };
 
 export const updatePatchProductByName = async (
-  product: Product
-): Promise<Product> => {
+  product: ProductRequest
+): Promise<ProductResponse> => {
   const name = product.name;
   try {
     const res = await axiosInstance.patch(

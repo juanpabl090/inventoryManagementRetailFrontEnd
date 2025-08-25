@@ -1,10 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updatePatchProductByName } from "../../services/producService";
-import type { Product } from "../../types/models/types";
+import type { ProductRequest, ProductResponse } from "../../types/models/index";
 
 export function usePatchProductsByName() {
   const queryClient = useQueryClient();
-  const { error, isSuccess, mutate } = useMutation<Product, Error, Product>({
+  const { error, isSuccess, mutate } = useMutation<
+    ProductResponse,
+    Error,
+    ProductRequest
+  >({
     mutationKey: ["patchProduct"],
     mutationFn: updatePatchProductByName,
     onSuccess: () => {

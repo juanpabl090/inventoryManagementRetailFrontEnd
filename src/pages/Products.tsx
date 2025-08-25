@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ProductCard } from "../components/index";
 import CreateEditProduct from "../layouts/CreateEditProduct";
-import { type Product } from "../types/models/types";
+import type { Product } from "../types/models/index";
 import PageHeader from "../layouts/PageHeader";
 import {
   useDeleteProducts,
@@ -9,6 +9,7 @@ import {
   usePostProducts,
   useProducts,
 } from "../hooks/products/index";
+import type { ProductRequest } from "../types/models/index";
 
 export default function Products() {
   const {
@@ -40,7 +41,7 @@ export default function Products() {
     }
   }, [postProductSucces]);
 
-  const handlePatch = (product: Product, onSuccess: () => void) => {
+  const handlePatch = (product: ProductRequest, onSuccess: () => void) => {
     patchProduct(product, {
       onSuccess: () => {
         onSuccess();
