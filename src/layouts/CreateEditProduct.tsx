@@ -1,10 +1,5 @@
 import { Button } from "../components/Button";
-import type {
-  Category,
-  ProductRequest,
-  ProductType,
-  Supplier,
-} from "../types/models/types";
+import type { Category, ProductType, Supplier, ProductRequest } from "../types/models/index";
 import { useFormik } from "formik";
 
 type createEditProductProps = {
