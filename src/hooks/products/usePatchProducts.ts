@@ -4,7 +4,7 @@ import type { ProductRequest, ProductResponse } from "../../types/models/index";
 
 export function usePatchProductsByName() {
   const queryClient = useQueryClient();
-  const { error, isSuccess, mutate } = useMutation<
+  const { error, isSuccess, mutate, isError, reset } = useMutation<
     ProductResponse,
     Error,
     ProductRequest
@@ -16,5 +16,5 @@ export function usePatchProductsByName() {
     },
   });
 
-  return { error, isSuccess, mutate };
+  return { error, isSuccess, mutate, isError, reset };
 }

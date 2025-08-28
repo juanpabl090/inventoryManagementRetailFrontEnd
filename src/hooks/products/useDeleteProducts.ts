@@ -3,7 +3,7 @@ import { deleteById } from "../../services/producService";
 
 export function useDeleteProducts() {
   const queryClient = useQueryClient();
-  const { data, error, isPending, isSuccess, mutate } = useMutation<
+  const { data, error, isPending, isSuccess, mutate, isError, reset } = useMutation<
     void,
     Error,
     number
@@ -15,5 +15,5 @@ export function useDeleteProducts() {
     },
   });
 
-  return { data, error, isPending, isSuccess, mutate };
+  return { data, error, isPending, isSuccess, mutate, isError, reset };
 }
