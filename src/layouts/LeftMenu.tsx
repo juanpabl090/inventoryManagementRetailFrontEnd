@@ -95,7 +95,7 @@ export default function LeftMenu() {
                     }`}
                   >
                     <span className="mr-4">
-                      <Icon strokeWidth={ActiveItem ? 2 : 1} />
+                      <Icon strokeWidth={ActiveItem ? 2 : 1} className="ml-5"/>
                     </span>
                     <span className="ms-3">{label}</span>
                   </Link>
@@ -103,14 +103,14 @@ export default function LeftMenu() {
               );
             })}
           </ul>
-          <ul className="space-y-2 font-medium">
+          <ul className="my-3 font-medium">
             <li
               onClick={handleLogOut}
               className="text-gray-900 hover:bg-gray-200"
             >
               <div className="flex items-center py-2 rounded-lg group">
                 <span className="mr-4">
-                  <LogOut strokeWidth={1} />
+                  <LogOut strokeWidth={1} className="ml-5"/>
                 </span>
                 <span className="ms-3">Log Out</span>
               </div>
