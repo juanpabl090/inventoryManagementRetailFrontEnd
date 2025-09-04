@@ -39,10 +39,9 @@ export const add = async (
   }
 };
 
-export const deleteById = async (id: number): Promise<CategoryResponse> => {
+export const deleteById = async (id: number): Promise<void> => {
   try {
-    const res = await axiosInstance.post(API_PATHS.CATEGORIES.DELETEBYID(id));
-    return res.data;
+    await axiosInstance.delete(API_PATHS.CATEGORIES.DELETEBYID(id));
   } catch (error: unknown) {
     if (isAxiosError(error)) {
       throw new Error(error?.message || "No se pudo actualizar la categoria");
@@ -54,9 +53,14 @@ export const deleteById = async (id: number): Promise<CategoryResponse> => {
   }
 };
 
-export const updateById = async (id: number): Promise<CategoryResponse> => {
+export const updateById = async (
+  categoryRequest: CategoryRequest
+): Promise<CategoryResponse> => {
   try {
-    const res = await axiosInstance.delete(API_PATHS.CATEGORIES.DELETEBYID(id));
+    const res = await axiosInstance.put(
+      API_PATHS.CATEGORIES.UPDATEBYID(Number(categoryRequest.id)),
+      categoryRequest
+    );
     return res.data;
   } catch (error: unknown) {
     if (isAxiosError(error)) {

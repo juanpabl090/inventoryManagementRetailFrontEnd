@@ -20,7 +20,7 @@ export const API_PATHS = {
     ALL: "/categories/get",
     ADD: "/categories/add",
     DELETEBYID: (id: number) => `/categories/delete/id/${id}`,
-    UPDATEBYID: (id: number) => `/categories/delete/id/${id}`,
+    UPDATEBYID: (id: number) => `/categories/update/id/${id}`,
   },
 } as const;
 

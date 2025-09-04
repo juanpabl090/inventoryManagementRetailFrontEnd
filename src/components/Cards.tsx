@@ -1,19 +1,31 @@
 import { Edit, FolderOpen, Trash2 } from "lucide-react";
 import CreateEditCategory from "../layouts/CreateEditCategory";
 import { useState } from "react";
-import type { Category } from "../types/models";
+import type { Category, CategoryRequest } from "../types/models";
 
 type Props = {
   categoryData: Category;
   name: string;
-  // TODO: agregar los demas props para hacer funcional el formulario, llevar el ons¿Submit a la pagina Categories
+  onSubmit: (categoryRequest: CategoryRequest, onSuccess: () => void) => void;
+  onClick: () => void;
 };
 
-export default function Cards({ name, categoryData }: Props) {
+export default function Cards({
+  name,
+  categoryData,
+  onClick,
+  onSubmit,
+}: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleCLose = () => setIsOpen(false);
   const handleOpen = () => setIsOpen(true);
+
+  const handleUpdate = (categoryRequest: CategoryRequest) => {
+    onSubmit(categoryRequest, () => {
+      setIsOpen(false);
+    });
+  };
 
   const newFunction = () => {
     return (
@@ -35,7 +47,7 @@ export default function Cards({ name, categoryData }: Props) {
               <Edit className="h-4 w-4" />
             </button>
             <button
-              onClick={() => console.log("Borrando")}
+              onClick={onClick}
               className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
             >
               <Trash2 className="h-4 w-4" />
@@ -52,12 +64,7 @@ export default function Cards({ name, categoryData }: Props) {
         isOpen={isOpen}
         onClose={handleCLose}
         categoryData={categoryData}
-        onSubmit={
-          () =>
-            console.log(
-              "editando"
-            ) /*(nombre de funcion del usePatchCategory (mutate: patchCategory*/
-        }
+        onSubmit={handleUpdate}
         title="Editar Categoria"
       />
       {newFunction()}

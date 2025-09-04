@@ -43,8 +43,8 @@ export default function CreateEditCategory({
                 ? { ...values, id: categoryData.id }
                 : { ...values };
             onSubmit(categoryToSend);
-            console.log(categoryToSend);
             resetForm();
+            onClose(); // Cierra el modal luego de la acción
           }}
         >
           {({ errors, resetForm, touched }) => (
