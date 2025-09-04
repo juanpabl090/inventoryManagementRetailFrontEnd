@@ -15,6 +15,13 @@ export const API_PATHS = {
     UPDATE_PATCH_PRODUCT_BY_NAME: (name: string) =>
       `/products/update/name/${name}`,
   },
+  CATEGORIES: {
+    BASE: "/categories",
+    ALL: "/categories/get",
+    ADD: "/categories/add",
+    DELETEBYID: (id: number) => `/categories/delete/id/${id}`,
+    UPDATEBYID: (id: number) => `/categories/delete/id/${id}`,
+  },
 } as const;
 
 export type apiPaths = typeof API_PATHS;
