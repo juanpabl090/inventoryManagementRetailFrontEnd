@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { AuthContext } from "./authContext";
-import type { AuthResponse } from "../types/auth/auth";
-import { validToken } from "../utils/tokenUtils";
+import type { AuthResponse } from "../../types/auth/auth";
+import { validToken } from "../../utils/tokenUtils";
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,

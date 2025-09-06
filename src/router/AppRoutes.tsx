@@ -10,7 +10,7 @@ import {
   NotFound,
   Login,
 } from "../pages/index";
-import { AuthContext } from "../context/authContext";
+import { AuthContext } from "../context/authContext/authContext";
 import { useContext } from "react";
 
 interface ProtectedRoutesProps {

@@ -7,6 +7,64 @@ import CreateEditCategory from "../layouts/CreateEditCategory";
 import usePostCategories from "../hooks/categories/usePostCategories";
 import usePutCategories from "../hooks/categories/usePatchCategories";
 import useDeleteCategories from "../hooks/categories/useDeleteCategories";
+import useAlert from "../hooks/alert/useAlert";
+
+const alertConfig = {
+  GET_EMPTY: {
+    id: 1,
+    title: "No hay categorias",
+    message: "La lista de categorias está vacia",
+    type: "Warning",
+  },
+  GET_SUCCESS: {
+    id: 2,
+    title: "Categorias cargadas",
+    message: "Los categorias se han cargado correctamente",
+    type: "Success",
+  },
+  GET_ERROR: {
+    id: 3,
+    title: "Error al cargar las categorias",
+    message: "Las categorias no se han podido cargar, intentalo de nuevo",
+    type: "Error",
+  },
+  POST_SUCCESS: {
+    id: 4,
+    title: "categoria creada",
+    message: "La categorias se ha creado correctamente",
+    type: "Success",
+  },
+  POST_ERROR: {
+    id: 5,
+    title: "Error al crear la categoria",
+    message: "La categoria no se ha podido crear, intentalo de nuevo",
+    type: "Error",
+  },
+  PUT_SUCCESS: {
+    id: 6,
+    title: "categorias actualizada",
+    message: "La categorias se ha actualizado correctamente",
+    type: "Info",
+  },
+  PUT_ERROR: {
+    id: 7,
+    title: "Error al actualizar la categoria",
+    message: "La categoria no se ha podido actualizar, intentalo de nuevo",
+    type: "Error",
+  },
+  DELETE_SUCCESS: {
+    id: 8,
+    title: "Categorias eliminada",
+    message: "La categoria se ha eliminado correctamente",
+    type: "Warning",
+  },
+  DELETE_ERROR: {
+    id: 9,
+    title: "Error al eliminar la categoria",
+    message: "La categorias no se ha podido eliminar, intentalo de nuevo",
+    type: "Error",
+  },
+} as const;
 
 export default function Categories() {
   // TODO: hacer el hook de crear, editar y eliminar categoria
@@ -38,7 +96,7 @@ export default function Categories() {
     isError: DeleteIsError,
     reset: DeleteReset,
   } = useDeleteCategories();
-
+  const { showAlert } = useAlert();
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -48,10 +106,86 @@ export default function Categories() {
     }
   }, [categories]);
 
+  useEffect(() => {
+    if (GetIsError) {
+      showAlert({
+        message: alertConfig.GET_ERROR.message,
+        title: alertConfig.GET_ERROR.title,
+        type: alertConfig.GET_ERROR.type,
+      });
+    } else if (GetIsSuccess) {
+      if (!categories || categories.length === 0) {
+        showAlert({
+          message: alertConfig.GET_EMPTY.message,
+          title: alertConfig.GET_EMPTY.title,
+          type: alertConfig.GET_EMPTY.type,
+        });
+      } else {
+        showAlert({
+          message: alertConfig.GET_SUCCESS.message,
+          title: alertConfig.GET_SUCCESS.title,
+          type: alertConfig.GET_SUCCESS.type,
+        });
+      }
+    }
+    // Solo depende de la PRIMERA carga, no de filteredProducts ni mutaciones
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (PostIsSuccess) {
+      setIsOpen(false);
+      showAlert({
+        message: alertConfig.POST_SUCCESS.message,
+        title: alertConfig.POST_SUCCESS.title,
+        type: alertConfig.POST_SUCCESS.type,
+      });
+      PostReset();
+    }
+  }, [PostIsSuccess, PostIsError, PostReset, showAlert]);
+
+  useEffect(() => {
+    if (PutIsError) {
+      showAlert({
+        message: alertConfig.PUT_ERROR.message,
+        title: alertConfig.PUT_ERROR.title,
+        type: alertConfig.PUT_ERROR.type,
+      });
+    } else if (PutIsSuccess) {
+      setIsOpen(false);
+      showAlert({
+        message: alertConfig.PUT_SUCCESS.message,
+        title: alertConfig.PUT_SUCCESS.title,
+        type: alertConfig.PUT_SUCCESS.type,
+      });
+      PutReset();
+    }
+  }, [PutIsSuccess, PutIsError, PutReset, showAlert]);
+
+  useEffect(() => {
+    if (DeleteIsError) {
+      showAlert({
+        message: alertConfig.DELETE_ERROR.message,
+        title: alertConfig.DELETE_ERROR.title,
+        type: alertConfig.DELETE_ERROR.type,
+      });
+    } else if (DeleteIsSuccess) {
+      showAlert({
+        message: alertConfig.DELETE_SUCCESS.message,
+        title: alertConfig.DELETE_SUCCESS.title,
+        type: alertConfig.DELETE_SUCCESS.type,
+      });
+      DeleteReset();
+    }
+  }, [DeleteIsSuccess, DeleteIsError, DeleteReset, showAlert]);
+
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
 
-  const handleEditCategory = (category: CategoryRequest, onSuccess: () => void) => {
+  const handleEditCategory = (
+    category: CategoryRequest,
+    onSuccess: () => void
+  ) => {
     PutMutate(category, {
       onSuccess: () => {
         onSuccess();
@@ -59,17 +193,13 @@ export default function Categories() {
     });
   };
 
-  useEffect(() => {
-    if (PostIsSuccess) {
-      setIsOpen(false);
-    }
-  }, [PostIsSuccess]);
-
-  useEffect(() => {
-    if (PutIsSuccess) {
-      setIsOpen(false);
-    }
-  }, [PutIsSuccess]);
+  if (GetIsLoading) {
+    return (
+      <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
+        <p className="text-center">Cargando</p>
+      </div>
+    );
+  }
 
   if (GetError || PostError || PutError || DeleteError) {
     return (

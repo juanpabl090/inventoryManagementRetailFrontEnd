@@ -2,7 +2,7 @@ import AppRoute from "./router/AppRoutes";
 import "./styles/styles.css";
 import LeftMenu from "./layouts/LeftMenu";
 import Nav from "./layouts/Nav";
-import { AuthContext } from "./context/authContext";
+import { AuthContext } from "./context/authContext/authContext";
 import { useContext } from "react";
 
 export default function App() {
