@@ -11,7 +11,7 @@ export default function useAuth() {
       queryClient.invalidateQueries({ queryKey: ["auth"] });
     },
     onError: (error) => {
-      console.log(error);
+      throw new Error(error.message);
     },
   });
 }
