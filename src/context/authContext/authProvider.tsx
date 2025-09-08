@@ -34,7 +34,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const refresh = () => {
     // TODO: HACER REFRESH TOKEN EN BACK END
-    console.log("Refresh Token");
   };
 
   return (

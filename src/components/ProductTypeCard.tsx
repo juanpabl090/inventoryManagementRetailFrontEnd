@@ -1,32 +1,34 @@
 import { Edit, FolderOpen, Trash2 } from "lucide-react";
-import CreateEditCategory from "../layouts/CreateEditCategory";
+import type { ProductType, ProductTypeRequest } from "../types/models";
 import { useState } from "react";
-import type { Category, CategoryRequest } from "../types/models";
+import CreateEditProductType from "../layouts/CreateEditProductType";
 
 type Props = {
-  categoryData: Category;
-
-  onSubmit: (categoryRequest: CategoryRequest, onSuccess: () => void) => void;
+  productTypeData: ProductType;
+  onSubmit: (
+    productTypeRequest: ProductTypeRequest,
+    onSuccess: () => void
+  ) => void;
   onClick: () => void;
 };
 
-export default function CategoryCard({
-  categoryData,
+export default function ProductTypeCard({
+  productTypeData,
   onClick,
   onSubmit,
 }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const handleCLose = () => setIsOpen(false);
-  const handleOpen = () => setIsOpen(true);
-
-  const handleUpdate = (categoryRequest: CategoryRequest) => {
-    onSubmit(categoryRequest, () => {
+  const handleUpdate = (productTypeRequest: ProductTypeRequest) => {
+    onSubmit(productTypeRequest, () => {
       setIsOpen(false);
     });
   };
 
-  const renderCategory = () => {
+  const handleOpen = () => setIsOpen(true);
+  const handleCLose = () => setIsOpen(false);
+
+  const RenderProductType = () => {
     return (
       <div className="bg-white rounded-lg shadow-sm border mx-2 border-gray-200 p-5 mt-5 hover:shadow-md transition-shadow">
         <div className="flex items-center justify-between">
@@ -35,8 +37,11 @@ export default function CategoryCard({
               <FolderOpen className="h-6 w-6 text-green-600" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 truncate max-w-52">
-                {categoryData.name}
+              <h3
+                className="font-semibold text-gray-900 truncate max-w-52"
+                title={productTypeData.name}
+              >
+                {productTypeData.name}
               </h3>
             </div>
           </div>
@@ -60,15 +65,15 @@ export default function CategoryCard({
   };
 
   return (
-    <div className="">
-      <CreateEditCategory
+    <div>
+      <CreateEditProductType
         isOpen={isOpen}
         onClose={handleCLose}
-        categoryData={categoryData}
         onSubmit={handleUpdate}
-        title="Editar Categoria"
+        title=""
+        productTypeData={productTypeData}
       />
-      {renderCategory()}
+      {RenderProductType()}
     </div>
   );
 }

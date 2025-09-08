@@ -5,7 +5,7 @@ import PageHeader from "../layouts/PageHeader";
 import type { Category, CategoryRequest } from "../types/models/index";
 import CreateEditCategory from "../layouts/CreateEditCategory";
 import usePostCategories from "../hooks/categories/usePostCategories";
-import usePutCategories from "../hooks/categories/usePatchCategories";
+import usePutCategories from "../hooks/categories/usePutCategories";
 import useDeleteCategories from "../hooks/categories/useDeleteCategories";
 import useAlert from "../hooks/alert/useAlert";
 
@@ -132,15 +132,21 @@ export default function Categories() {
   }, []);
 
   useEffect(() => {
+    if (PostIsError) {
+      showAlert({
+        message: alertConfig.POST_ERROR.message,
+        title: alertConfig.POST_ERROR.title,
+        type: alertConfig.POST_ERROR.type,
+      });
+    }
     if (PostIsSuccess) {
-      setIsOpen(false);
       showAlert({
         message: alertConfig.POST_SUCCESS.message,
         title: alertConfig.POST_SUCCESS.title,
         type: alertConfig.POST_SUCCESS.type,
       });
-      PostReset();
     }
+    PostReset();
   }, [PostIsSuccess, PostIsError, PostReset, showAlert]);
 
   useEffect(() => {
@@ -151,14 +157,13 @@ export default function Categories() {
         type: alertConfig.PUT_ERROR.type,
       });
     } else if (PutIsSuccess) {
-      setIsOpen(false);
       showAlert({
         message: alertConfig.PUT_SUCCESS.message,
         title: alertConfig.PUT_SUCCESS.title,
         type: alertConfig.PUT_SUCCESS.type,
       });
-      PutReset();
     }
+    PutReset();
   }, [PutIsSuccess, PutIsError, PutReset, showAlert]);
 
   useEffect(() => {
@@ -174,8 +179,8 @@ export default function Categories() {
         title: alertConfig.DELETE_SUCCESS.title,
         type: alertConfig.DELETE_SUCCESS.type,
       });
-      DeleteReset();
     }
+    DeleteReset();
   }, [DeleteIsSuccess, DeleteIsError, DeleteReset, showAlert]);
 
   const handleOpen = () => setIsOpen(true);
@@ -204,7 +209,7 @@ export default function Categories() {
     return (
       <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
         <p className="text-center">
-          Hubo un erro:{" "}
+          Hubo un error:{" "}
           {GetError?.message ||
             PostError?.message ||
             PutError?.message ||
@@ -221,7 +226,6 @@ export default function Categories() {
       filteredCategories.map((category) => (
         <CategoryCard
           key={category.id}
-          name={category.name}
           categoryData={category}
           onClick={() => {
             if (category.id !== undefined) DeleteMutate(category.id);

@@ -9,7 +9,8 @@ export const validToken = (token: string) => {
     const now = Date.now() / 1000;
     return decoded.exp > now;
   } catch (e) {
-    console.log(e);
-    return false;
+    throw new Error("Token invalido", {
+      cause: e,
+    });
   }
 };
