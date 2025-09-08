@@ -27,7 +27,7 @@ export default function CategoryCard({
     });
   };
 
-  const newFunction = () => {
+  const renderCategory = () => {
     return (
       <div className="bg-white rounded-lg shadow-sm border mx-2 border-gray-200 p-5 mt-5 hover:shadow-md transition-shadow">
         <div className="flex items-center justify-between">
@@ -67,7 +67,7 @@ export default function CategoryCard({
         onSubmit={handleUpdate}
         title="Editar Categoria"
       />
-      {newFunction()}
+      {renderCategory()}
     </div>
   );
 }
