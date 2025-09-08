@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Cards from "../components/Cards";
+import CategoryCard from "../components/CategoryCard";
 import useCategories from "../hooks/categories/useCategories";
 import PageHeader from "../layouts/PageHeader";
 import type { Category, CategoryRequest } from "../types/models/index";
@@ -19,7 +19,7 @@ const alertConfig = {
   GET_SUCCESS: {
     id: 2,
     title: "Categorias cargadas",
-    message: "Los categorias se han cargado correctamente",
+    message: "Las categorias se han cargado correctamente",
     type: "Success",
   },
   GET_ERROR: {
@@ -67,7 +67,6 @@ const alertConfig = {
 } as const;
 
 export default function Categories() {
-  // TODO: hacer el hook de crear, editar y eliminar categoria
   const {
     data: categories,
     error: GetError,
@@ -220,7 +219,7 @@ export default function Categories() {
       <h1 className="mt-4 text-gray-600">No hay Categorias</h1>
     ) : (
       filteredCategories.map((category) => (
-        <Cards
+        <CategoryCard
           key={category.id}
           name={category.name}
           categoryData={category}

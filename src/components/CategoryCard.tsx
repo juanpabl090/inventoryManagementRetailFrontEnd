@@ -10,7 +10,7 @@ type Props = {
   onClick: () => void;
 };
 
-export default function Cards({
+export default function CategoryCard({
   name,
   categoryData,
   onClick,
