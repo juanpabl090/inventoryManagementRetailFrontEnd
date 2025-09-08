@@ -10,19 +10,7 @@ import {
   useProducts,
 } from "../hooks/products/index";
 import type { ProductRequest } from "../types/models/index";
-import Alert from "../components/Alert";
-
-type AlertType =
-  | null
-  | "GET_EMPTY"
-  | "GET_SUCCESS"
-  | "GET_ERROR"
-  | "POST_SUCCESS"
-  | "POST_ERROR"
-  | "PATCH_SUCCESS"
-  | "PATCH_ERROR"
-  | "DELETE_SUCCESS"
-  | "DELETE_ERROR";
+import useAlert from "../hooks/alert/useAlert";
 
 const alertConfig = {
   GET_EMPTY: {
@@ -34,7 +22,7 @@ const alertConfig = {
   GET_SUCCESS: {
     id: 2,
     title: "Productos cargados",
-    message: "Los Productos se han cargado correctamente",
+    message: "Los productos se han cargado correctamente",
     type: "Success",
   },
   GET_ERROR: {
@@ -110,11 +98,9 @@ export default function Products() {
     isError: PatchProductError,
     reset: resetPatch,
   } = usePatchProductsByName();
+  const { showAlert } = useAlert();
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-
-  const [alertType, setAlertType] = useState<AlertType>(null);
-  const [alertOpen, setAlertOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (products) {
@@ -130,16 +116,24 @@ export default function Products() {
 
   useEffect(() => {
     if (GetProductError) {
-      console.log(GetProductError);
-      setAlertType("GET_ERROR");
-      setAlertOpen(true);
+      showAlert({
+        message: alertConfig.GET_ERROR.message,
+        title: alertConfig.GET_ERROR.title,
+        type: alertConfig.GET_ERROR.type,
+      });
     } else if (GetProductSuccess) {
       if (!products || products.length === 0) {
-        setAlertType("GET_EMPTY");
-        setAlertOpen(true);
+        showAlert({
+          message: alertConfig.GET_EMPTY.message,
+          title: alertConfig.GET_EMPTY.title,
+          type: alertConfig.GET_EMPTY.type,
+        });
       } else {
-        setAlertType("GET_SUCCESS");
-        setAlertOpen(true);
+        showAlert({
+          message: alertConfig.GET_SUCCESS.message,
+          title: alertConfig.GET_SUCCESS.title,
+          type: alertConfig.GET_SUCCESS.type,
+        });
       }
     }
     // Solo depende de la PRIMERA carga, no de filteredProducts ni mutaciones
@@ -148,65 +142,58 @@ export default function Products() {
 
   useEffect(() => {
     if (PostProductSuccess) {
-      setAlertType("POST_SUCCESS");
-      setAlertOpen(true);
+      showAlert({
+        message: alertConfig.POST_SUCCESS.message,
+        title: alertConfig.POST_SUCCESS.title,
+        type: alertConfig.POST_SUCCESS.type,
+      });
       resetPost();
       return;
     } else if (PostProductError) {
-      setAlertType("POST_ERROR");
-      setAlertOpen(true);
+      showAlert({
+        message: alertConfig.POST_ERROR.message,
+        title: alertConfig.POST_ERROR.title,
+        type: alertConfig.POST_ERROR.type,
+      });
       resetPost();
-      return;
     }
-  }, [PostProductError, PostProductSuccess, resetPost]);
+  }, [PostProductError, PostProductSuccess, resetPost, showAlert]);
 
   useEffect(() => {
     if (PatchProductError) {
-      setAlertType("PATCH_ERROR");
-      setAlertOpen(true);
+      showAlert({
+        message: alertConfig.PATCH_ERROR.message,
+        title: alertConfig.PATCH_ERROR.title,
+        type: alertConfig.PATCH_ERROR.type,
+      });
       resetPatch();
-      return;
     } else if (PatchProductSuccess) {
-      setAlertType("PATCH_SUCCESS");
-      setAlertOpen(true);
+      showAlert({
+        message: alertConfig.PATCH_SUCCESS.message,
+        title: alertConfig.PATCH_SUCCESS.title,
+        type: alertConfig.PATCH_SUCCESS.type,
+      });
       resetPatch();
-      return;
     }
-  }, [PatchProductError, PatchProductSuccess, resetPatch]);
+  }, [PatchProductError, PatchProductSuccess, resetPatch, showAlert]);
 
   useEffect(() => {
     if (DeleteProductError) {
-      setAlertType("DELETE_ERROR");
-      setAlertOpen(true);
+      showAlert({
+        message: alertConfig.DELETE_ERROR.message,
+        title: alertConfig.DELETE_ERROR.title,
+        type: alertConfig.DELETE_ERROR.type,
+      });
       resetDelete();
-      return;
     } else if (DeleteProductSuccess) {
-      setAlertType("DELETE_SUCCESS");
-      setAlertOpen(true);
+      showAlert({
+        message: alertConfig.DELETE_SUCCESS.message,
+        title: alertConfig.DELETE_SUCCESS.title,
+        type: alertConfig.DELETE_SUCCESS.type,
+      });
       resetDelete();
-      return;
     }
-  }, [DeleteProductError, DeleteProductSuccess, resetDelete]);
-
-  const handleAlertClose = () => {
-    setAlertType(null);
-    setAlertOpen(false);
-  };
-
-  const renderAlert = () => {
-    if (!alertOpen || !alertType) return null;
-    const { id, title, message, type } = alertConfig[alertType];
-    return (
-      <Alert
-        key={id}
-        title={title}
-        message={message}
-        type={type}
-        onClose={handleAlertClose}
-        isOpen={alertOpen}
-      />
-    );
-  };
+  }, [DeleteProductError, DeleteProductSuccess, resetDelete, showAlert]);
 
   const handlePatch = (product: ProductRequest, onSuccess: () => void) => {
     patchProduct(product, {
@@ -278,7 +265,6 @@ export default function Products() {
 
   return (
     <div>
-      {renderAlert()}
       <PageHeader<Product>
         title="Gestión de Productos"
         description="Administra el catálogo de productos de tu empresa"
