@@ -13,7 +13,7 @@ import {
 import { useContext, useState } from "react";
 import { Button } from "../components/Button";
 import { Link } from "react-router";
-import { AuthContext } from "../context/authContext";
+import { AuthContext } from "../context/authContext/authContext";
 
 interface menuItem {
   icon: LucideIcon;
@@ -95,7 +95,7 @@ export default function LeftMenu() {
                     }`}
                   >
                     <span className="mr-4">
-                      <Icon strokeWidth={ActiveItem ? 2 : 1} className="ml-5"/>
+                      <Icon strokeWidth={ActiveItem ? 2 : 1} className="ml-5" />
                     </span>
                     <span className="ms-3">{label}</span>
                   </Link>
@@ -110,7 +110,7 @@ export default function LeftMenu() {
             >
               <div className="flex items-center py-2 rounded-lg group">
                 <span className="mr-4">
-                  <LogOut strokeWidth={1} className="ml-5"/>
+                  <LogOut strokeWidth={1} className="ml-5" />
                 </span>
                 <span className="ms-3">Log Out</span>
               </div>

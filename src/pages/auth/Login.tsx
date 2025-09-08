@@ -3,7 +3,7 @@ import type { AuthRequest } from "../../types/auth/auth";
 import useAuth from "../../hooks/auth/useAuth";
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { AuthContext } from "../../context/authContext";
+import { AuthContext } from "../../context/authContext/authContext";
 
 export default function Login() {
   const auth = useContext(AuthContext);
