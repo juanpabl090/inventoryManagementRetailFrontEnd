@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { Button } from "../components/Button";
+import useCategories from "../hooks/categories/useCategories";
 import type {
   Category,
   ProductType,
@@ -7,6 +9,7 @@ import type {
 } from "../types/models/index";
 import { ErrorMessage, Field, Formik, Form } from "formik";
 import * as yup from "yup";
+import { useProductsTypes } from "../hooks/productType";
 
 type createEditProductProps = {
   title?: string;
@@ -23,8 +26,46 @@ type createEditProductProps = {
   isOpen?: boolean;
   onSubmit: (product: ProductRequest) => void;
 };
+interface objectOptions {
+  categories: Category;
+  productType: ProductType;
+  supplier?: Supplier;
+}
 
 export default function CreateEditProduct(propValues: createEditProductProps) {
+  const [objectOptions, setObjectOptions] = useState<objectOptions[]>([]);
+
+  const { data: dataCategories } = useCategories();
+  const { data: dataProductsTypes } = useProductsTypes();
+
+  const setOptions = (
+    dataCategories: Category[],
+    dataProductsTypes: ProductType[]
+  ): objectOptions[] => {
+    const legth = Math.min(dataCategories.length, dataProductsTypes.length);
+    const options: objectOptions[] = [];
+
+    for (let index = 0; index < legth; index++) {
+      options.push({
+        categories: {
+          id: dataCategories[index].id,
+          name: dataCategories[index].name,
+        },
+        productType: {
+          id: dataProductsTypes[index].id,
+          name: dataProductsTypes[index].name,
+        },
+      });
+    }
+    return options;
+  };
+
+  useEffect(() => {
+    if (dataCategories && dataProductsTypes) {
+      setObjectOptions(setOptions(dataCategories, dataProductsTypes));
+    }
+  }, [dataCategories, dataProductsTypes]);
+
   if (!propValues.isOpen) return null;
 
   const quantityError = (e: string): string => {
@@ -291,9 +332,11 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
                       ? "Elige una categoria"
                       : propValues.category?.id}
                   </option>
-                  <option value={6}>keyboards</option>
-                  <option value={7}>robotics</option>
-                  <option value={8}>3d_printers</option>
+                  {objectOptions.map((item) => (
+                    <option key={item.categories.id} value={item.categories.id}>
+                      {item.categories.name}
+                    </option>
+                  ))}
                 </Field>
                 <Field
                   as="select"
@@ -307,9 +350,14 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
                       ? "Elige una categoria"
                       : propValues.productType?.id}
                   </option>
-                  <option value={1}>tablet</option>
-                  <option value={2}>gaming_console</option>
-                  <option value={3}>drone</option>
+                  {objectOptions.map((item) => (
+                    <option
+                      key={item.categories.id}
+                      value={item.productType.id}
+                    >
+                      {item.productType.name}
+                    </option>
+                  ))}
                 </Field>
                 <Field
                   as="select"
