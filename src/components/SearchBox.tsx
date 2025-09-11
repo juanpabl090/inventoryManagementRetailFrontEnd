@@ -54,21 +54,22 @@ export default function SearchBox<T>({
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
       <Search
         strokeWidth={1.5}
         className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
       />
       <input
+        autoComplete="false"
         name="searchBox"
-        className="w-11/12 peer z-10 px-6 py-4 rounded-xl outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 pl-10"
+        className="w-full peer z-10 px-6 py-4 rounded-xl outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 pl-10"
         placeholder="| Buscabas Algo?"
         value={query}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
       />
       {history.length > 0 && (
-        <div className="absolute w-11/12 top-full mt-2 opacity-0 translate-y-2 focus-within:translate-y-0 peer-focus:opacity-100  peer-focus:pointer-events-auto transition-all duration-200 z-20 rounded-xl border border-gray-200 p-4 bg-white shadow-lg">
+        <div className="absolute w-full top-full mt-2 opacity-0 translate-y-2 focus-within:translate-y-0 peer-focus:opacity-100  peer-focus:pointer-events-auto transition-all duration-200 z-20 rounded-xl border border-gray-200 p-4 bg-white shadow-lg">
           <p className="font-semibold text-xs text-neutral-500 mb-2">
             ÚLTIMAS BÚSQUEDAS
           </p>

@@ -1,4 +1,4 @@
-import type { Contact } from "./Contact";
+import type { Contact, ContactRequest, ContactResponse } from "./Contact";
 
 export interface Supplier {
   id: number;
@@ -9,11 +9,11 @@ export interface Supplier {
 export interface SupplierResponse {
   id: number;
   name: string;
-  contact?: Contact;
+  contact?: ContactResponse;
 }
 
 export interface SupplierRequest {
   id?: number;
   name?: string;
-  contact?: Contact;
+  contact?: ContactRequest;
 }

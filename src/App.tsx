@@ -17,11 +17,11 @@ export default function App() {
       <div className="w-full">
         <Nav />
       </div>
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 ">
         <div className="max-w-7xl flex-shrink-0">
           <LeftMenu />
         </div>
-        <main className="flex flex-col overflow-auto bg-neutral-100 w-screen p-5">
+        <main className="flex flex-col bg-neutral-100 w-screen p-5">
           <AppRoute />
         </main>
       </div>

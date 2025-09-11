@@ -29,6 +29,13 @@ export const API_PATHS = {
     DELETEBYID: (id: number) => `/ProductType/delete/id/${id}`,
     UPDATEBYID: (id: number) => `/ProductType/update/id/${id}`,
   },
+  SUPPLIERS: {
+    BASE: "//suppliers",
+    ALL: "/suppliers/get",
+    ADD: "/suppliers/add",
+    DELETEBYID: (id: number) => `/suppliers/delete/id/${id}`,
+    UPDATEBYID: (id: number) => `/suppliers/update/id/${id}`,
+  },
 } as const;
 
 export type apiPaths = typeof API_PATHS;
