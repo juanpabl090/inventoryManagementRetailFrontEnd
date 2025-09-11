@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Button } from "../components/Button";
 import useCategories from "../hooks/categories/useCategories";
 import type {
@@ -10,6 +9,8 @@ import type {
 import { ErrorMessage, Field, Formik, Form } from "formik";
 import * as yup from "yup";
 import { useProductsTypes } from "../hooks/productType";
+import { useSupplier } from "../hooks/Supplier";
+import { useCallback, useMemo } from "react";
 
 type createEditProductProps = {
   title?: string;
@@ -26,98 +27,122 @@ type createEditProductProps = {
   isOpen?: boolean;
   onSubmit: (product: ProductRequest) => void;
 };
-interface objectOptions {
-  categories: Category;
-  productType: ProductType;
-  supplier?: Supplier;
-}
+
+const quantityError = (e: string): string => {
+  return `${e} price must be greater than 0`;
+};
+
+const ValidationSchema = yup.object().shape({
+  name: yup.string().required("name is required").min(1).max(50),
+  description: yup.string().required("description is required").min(1).max(150),
+  categoryId: yup
+    .number()
+    .typeError("Category is required")
+    .required("category is required")
+    .notOneOf([0], "Must Pick a Category"),
+  buyPrice: yup
+    .number()
+    .required("Buy price is required")
+    .positive(quantityError("Buy price")),
+  salePrice: yup
+    .number()
+    .required("Sale price is required")
+    .positive(quantityError("Sale price")),
+  stock: yup
+    .number()
+    .required("Stock is required")
+    .positive(quantityError("Stock")),
+  supplierId: yup
+    .number()
+    .typeError("Supplier is required")
+    .required("Supplier is required")
+    .notOneOf([0], "Must Pick a Supplier"),
+  productTypeId: yup
+    .number()
+    .typeError("Product type is required")
+    .required("Product type is required")
+    .notOneOf([0], "Must Pick a Product Type"),
+});
 
 export default function CreateEditProduct(propValues: createEditProductProps) {
-  const [objectOptions, setObjectOptions] = useState<objectOptions[]>([]);
-
   const { data: dataCategories } = useCategories();
   const { data: dataProductsTypes } = useProductsTypes();
+  const { data: dataSuplliers } = useSupplier();
 
-  const setOptions = (
-    dataCategories: Category[],
-    dataProductsTypes: ProductType[]
-  ): objectOptions[] => {
-    const legth = Math.min(dataCategories.length, dataProductsTypes.length);
-    const options: objectOptions[] = [];
+  const initialValues = useMemo(
+    () => ({
+      name: propValues.name || "",
+      description: propValues.description || "",
+      categoryId: propValues.category?.id || 0,
+      buyPrice: propValues.buyPrice || 0,
+      salePrice: propValues.salePrice || 0,
+      stock: propValues.stock || 0,
+      supplierId: propValues.supplier?.id || 0,
+      productTypeId: propValues.productType?.id || 0,
+    }),
+    [
+      propValues.name,
+      propValues.description,
+      propValues.category?.id,
+      propValues.buyPrice,
+      propValues.salePrice,
+      propValues.stock,
+      propValues.supplier?.id,
+      propValues.productType?.id,
+    ]
+  );
 
-    for (let index = 0; index < legth; index++) {
-      options.push({
-        categories: {
-          id: dataCategories[index].id,
-          name: dataCategories[index].name,
-        },
-        productType: {
-          id: dataProductsTypes[index].id,
-          name: dataProductsTypes[index].name,
-        },
-      });
-    }
-    return options;
-  };
+  const categoryOptions = useMemo(
+    () =>
+      dataCategories?.map((item) => (
+        <option key={item.id} value={item.id}>
+          {item.name}
+        </option>
+      )),
+    [dataCategories]
+  );
 
-  useEffect(() => {
-    if (dataCategories && dataProductsTypes) {
-      setObjectOptions(setOptions(dataCategories, dataProductsTypes));
-    }
-  }, [dataCategories, dataProductsTypes]);
+  const ProductTypesOptions = useMemo(
+    () =>
+      dataProductsTypes?.map((item) => (
+        <option key={item.id} value={item.id}>
+          {item.name}
+        </option>
+      )),
+    [dataProductsTypes]
+  );
+  const SupplierOptions = useMemo(
+    () =>
+      dataSuplliers?.map((item) => (
+        <option key={item.id} value={item.id}>
+          {item.name}
+        </option>
+      )),
+    [dataSuplliers]
+  );
+
+  const handleSubmit = useCallback(
+    (
+      values: typeof initialValues,
+      { resetForm }: { resetForm: () => void }
+    ) => {
+      const productToSend =
+        propValues.id !== undefined ? { ...values, id: propValues.id } : values;
+      propValues.onSubmit(productToSend);
+      resetForm();
+    },
+    [propValues]
+  );
+
+  const handleCancel = useCallback(
+    (resetForm: () => void) => {
+      resetForm();
+      propValues.onClose();
+    },
+    [propValues]
+  );
 
   if (!propValues.isOpen) return null;
-
-  const quantityError = (e: string): string => {
-    return `${e} price must be greater than 0`;
-  };
-
-  const ValidationSchema = yup.object().shape({
-    name: yup.string().required("name is required").min(1).max(50),
-    description: yup
-      .string()
-      .required("description is required")
-      .min(1)
-      .max(150),
-    categoryId: yup
-      .number()
-      .typeError("Category is required")
-      .required("category is required")
-      .notOneOf([0], "Must Pick a Category"),
-    buyPrice: yup
-      .number()
-      .required("Buy price is required")
-      .positive(quantityError("Buy price")),
-    salePrice: yup
-      .number()
-      .required("Sale price is required")
-      .positive(quantityError("Sale price")),
-    stock: yup
-      .number()
-      .required("Stock is required")
-      .positive(quantityError("Stock")),
-    supplierId: yup
-      .number()
-      .typeError("Supplier is required")
-      .required("Supplier is required")
-      .notOneOf([0], "Must Pick a Supplier"),
-    productTypeId: yup
-      .number()
-      .typeError("Product type is required")
-      .required("Product type is required")
-      .notOneOf([0], "Must Pick a Product Type"),
-  });
-
-  const initialValues = {
-    name: propValues.name || "",
-    description: propValues.description || "",
-    categoryId: propValues.category?.id || 0,
-    buyPrice: propValues.buyPrice || 0,
-    salePrice: propValues.salePrice || 0,
-    stock: propValues.stock || 0,
-    supplierId: propValues.supplier?.id || 0,
-    productTypeId: propValues.productType?.id || 0,
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex justify-center items-center bg-neutral-500 bg-opacity-50">
@@ -127,16 +152,9 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
           initialValues={initialValues}
           validationSchema={ValidationSchema}
           enableReinitialize
-          onSubmit={(values, { resetForm }) => {
-            const productToSend =
-              propValues.id !== undefined
-                ? { ...values, id: propValues.id }
-                : values;
-            propValues.onSubmit(productToSend);
-            resetForm();
-          }}
+          onSubmit={handleSubmit}
         >
-          {({ resetForm, errors, touched }) => (
+          {({ errors, touched }) => (
             <Form>
               <div className="flex justify-between my-2">
                 {touched.name && errors.name ? (
@@ -332,11 +350,7 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
                       ? "Elige una categoria"
                       : propValues.category?.id}
                   </option>
-                  {objectOptions.map((item) => (
-                    <option key={item.categories.id} value={item.categories.id}>
-                      {item.categories.name}
-                    </option>
-                  ))}
+                  {categoryOptions}
                 </Field>
                 <Field
                   as="select"
@@ -350,14 +364,7 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
                       ? "Elige una categoria"
                       : propValues.productType?.id}
                   </option>
-                  {objectOptions.map((item) => (
-                    <option
-                      key={item.categories.id}
-                      value={item.productType.id}
-                    >
-                      {item.productType.name}
-                    </option>
-                  ))}
+                  {ProductTypesOptions}
                 </Field>
                 <Field
                   as="select"
@@ -371,11 +378,7 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
                       ? "Elige una categoria"
                       : propValues.supplier}
                   </option>
-                  <option value={15}>raspberry_pi</option>
-                  <option value={16}>arduino</option>
-                  <option value={18}>intel</option>
-                  <option value={20}>sony</option>
-                  <option value={21}>meta</option>
+                  {SupplierOptions}
                 </Field>
               </div>
               <div className="flex justify-evenly mt-10">
@@ -392,10 +395,7 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
                   variant="outline"
                   size="lg"
                   className="w-full ml-5 "
-                  onClick={() => {
-                    resetForm();
-                    propValues.onClose();
-                  }}
+                  onClick={() => handleCancel}
                 >
                   Cancelar
                 </Button>

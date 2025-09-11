@@ -13,9 +13,9 @@ export const getAll = async (): Promise<Category[]> => {
     return res.data;
   } catch (error: unknown) {
     if (isAxiosError(error)) {
-      throw new Error(error?.message || "No se pudo crear la categoria");
+      throw new Error(error?.message || "No se pudo cargar las categoria");
     } else {
-      throw new Error("Hubo un error al crear la categoria", {
+      throw new Error("Hubo un error al cargar las categoria", {
         cause: error,
       });
     }
@@ -44,9 +44,9 @@ export const deleteById = async (id: number): Promise<void> => {
     await axiosInstance.delete(API_PATHS.CATEGORIES.DELETEBYID(id));
   } catch (error: unknown) {
     if (isAxiosError(error)) {
-      throw new Error(error?.message || "No se pudo actualizar la categoria");
+      throw new Error(error?.message || "No se pudo eliminar la categoria");
     } else {
-      throw new Error("Hubo un erro al actualizar la categoria", {
+      throw new Error("Hubo un error al eliminar la categoria", {
         cause: error,
       });
     }
@@ -66,7 +66,7 @@ export const updateById = async (
     if (isAxiosError(error)) {
       throw new Error(error?.message || "No se pudo actualizar la categoria");
     } else {
-      throw new Error("Hubo un erro al actualizar la categoria", {
+      throw new Error("Hubo un error al actualizar la categoria", {
         cause: error,
       });
     }

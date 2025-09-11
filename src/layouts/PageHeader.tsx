@@ -21,7 +21,7 @@ export default function PageHeader<T>({
   buttonLabel,
 }: Props<T>) {
   return (
-    <>
+    <div className="sticky top-0 z-30 bg-neutral-100">
       <div className="flex justify-between items-center w-full pb-4">
         <div className="flex flex-col gap-0">
           <h1 className="text-neutral-950 text-2xl font-bold">{title}</h1>
@@ -46,6 +46,6 @@ export default function PageHeader<T>({
           extractName={extractName}
         />
       </div>
-    </>
+    </div>
   );
 }
