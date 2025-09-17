@@ -35,7 +35,7 @@ export default function CategoryCard({
               <FolderOpen className="h-6 w-6 text-green-600" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 truncate max-w-52">
+              <h3 className="font-semibold text-gray-900 truncate lg:max-w-52 md:max-w-20 break-words">
                 {categoryData.name}
               </h3>
             </div>

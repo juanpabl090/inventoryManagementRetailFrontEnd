@@ -1,5 +1,5 @@
 import type { Category, CategoryRequest } from "../types/models";
-import * as yup from "yup";
+import { object, string } from "yup";
 import { ErrorMessage, Field, Formik, Form } from "formik";
 import { Button } from "../components";
 
@@ -20,9 +20,8 @@ export default function CreateEditCategory({
 }: Props) {
   if (!isOpen) return null;
 
-  const schema = yup.object().shape({
-    name: yup
-      .string()
+  const schema = object().shape({
+    name: string()
       .required()
       .max(50, "Name category must be between 1 and 50 characters"),
   });

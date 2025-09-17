@@ -1,6 +1,6 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import type { ProductType, ProductTypeRequest } from "../types/models";
-import * as yup from "yup";
+import { object, string } from "yup";
 import { Button } from "../components";
 
 type Props = {
@@ -22,9 +22,8 @@ export default function CreateEditProductType({
   const initialValues = {
     name: productTypeData?.name ?? "",
   };
-  const schema = yup.object().shape({
-    name: yup
-      .string()
+  const schema = object().shape({
+    name: string()
       .required()
       .max(50, "Name category must be between 1 and 50 characters"),
   });

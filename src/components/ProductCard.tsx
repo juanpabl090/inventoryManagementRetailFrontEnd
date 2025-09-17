@@ -163,25 +163,43 @@ export default function ProductCard({
           <Package className="text-primary-500 h-6 w-6" />
         </div>
         <div className="px-2 flex-grow min-w-0">
-          <p className="text-base font-bold break-words max-w-full">{name}</p>
+          <p className="text-base font-bold truncate lg:max-w-52 md:max-w-64 break-words">
+            {name}
+          </p>
           <p className="text-sm text-neutral-500">{id}</p>
         </div>
         <div className="flex space-x-2">
           <Button
+            id="edit-button"
+            aria-label="Edit"
             type="button"
             variant="ghost"
             className="p-2 text-primary-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
             onClick={handleIsOpen}
           >
-            <SquarePen strokeWidth={1} size={20} className="h-4 w-4" />
+            <SquarePen
+              id="edit-icon"
+              aria-label="Edit"
+              strokeWidth={1}
+              size={20}
+              className="h-4 w-4"
+            />
           </Button>
           <Button
+            id="trash-button"
+            aria-label="Delete"
             type="button"
             variant="ghost"
             className="p-2 text-error-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
             onClick={onClick}
           >
-            <Trash2 strokeWidth={1} size={20} className="h-4 w-4" />
+            <Trash2
+              id="trash-icon"
+              aria-label="Delete"
+              strokeWidth={1}
+              size={20}
+              className="h-4 w-4"
+            />
           </Button>
         </div>
       </div>
