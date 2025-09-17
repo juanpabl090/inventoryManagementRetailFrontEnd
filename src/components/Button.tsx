@@ -1,14 +1,15 @@
 // components/Button.tsx
+import type React from "react";
 import type { ReactNode, MouseEventHandler } from "react";
 
-type ButtonProps = {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children?: ReactNode;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   className?: string;
   variant?: "solid" | "outline" | "ghost";
   size?: "sm" | "md" | "lg";
-  type: "submit" | "button" | "reset" | undefined;
-};
+  type?: "submit" | "button" | "reset" | undefined;
+}
 
 export const Button = ({
   children,
@@ -24,7 +25,7 @@ export const Button = ({
 
   // Variantes
   const variantClasses = {
-    solid: "bg-primary-500 hover:bg-primary-600 text-white",
+    solid: "bg-primary-600 hover:bg-primary-600 text-white",
     outline: "border border-primary-500 text-primary-500 hover:bg-primary-50",
     ghost: "text-primary-500 hover:bg-primary-50",
   };

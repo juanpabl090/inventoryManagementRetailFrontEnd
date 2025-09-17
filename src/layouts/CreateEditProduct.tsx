@@ -1,5 +1,6 @@
 import { Button } from "../components/Button";
 import useCategories from "../hooks/categories/useCategories";
+import { object, number, string } from "yup";
 import type {
   Category,
   ProductType,
@@ -7,7 +8,6 @@ import type {
   ProductRequest,
 } from "../types/models/index";
 import { ErrorMessage, Field, Formik, Form } from "formik";
-import * as yup from "yup";
 import { useProductsTypes } from "../hooks/productType";
 import { useSupplier } from "../hooks/Supplier";
 import { useCallback, useMemo } from "react";
@@ -32,33 +32,27 @@ const quantityError = (e: string): string => {
   return `${e} price must be greater than 0`;
 };
 
-const ValidationSchema = yup.object().shape({
-  name: yup.string().required("name is required").min(1).max(50),
-  description: yup.string().required("description is required").min(1).max(150),
-  categoryId: yup
-    .number()
+const ValidationSchema = object().shape({
+  name: string().required("name is required").min(1).max(50),
+  description: string().required("description is required").min(1).max(150),
+  categoryId: number()
     .typeError("Category is required")
     .required("category is required")
     .notOneOf([0], "Must Pick a Category"),
-  buyPrice: yup
-    .number()
+  buyPrice: number()
     .required("Buy price is required")
     .positive(quantityError("Buy price")),
-  salePrice: yup
-    .number()
+  salePrice: number()
     .required("Sale price is required")
     .positive(quantityError("Sale price")),
-  stock: yup
-    .number()
+  stock: number()
     .required("Stock is required")
     .positive(quantityError("Stock")),
-  supplierId: yup
-    .number()
+  supplierId: number()
     .typeError("Supplier is required")
     .required("Supplier is required")
     .notOneOf([0], "Must Pick a Supplier"),
-  productTypeId: yup
-    .number()
+  productTypeId: number()
     .typeError("Product type is required")
     .required("Product type is required")
     .notOneOf([0], "Must Pick a Product Type"),
@@ -154,7 +148,7 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
           enableReinitialize
           onSubmit={handleSubmit}
         >
-          {({ errors, touched }) => (
+          {({ resetForm, errors, touched }) => (
             <Form>
               <div className="flex justify-between my-2">
                 {touched.name && errors.name ? (
@@ -395,7 +389,12 @@ export default function CreateEditProduct(propValues: createEditProductProps) {
                   variant="outline"
                   size="lg"
                   className="w-full ml-5 "
-                  onClick={() => handleCancel}
+                  onClick={() =>
+                    handleCancel(() => {
+                      resetForm();
+                      propValues.onClose();
+                    })
+                  }
                 >
                   Cancelar
                 </Button>

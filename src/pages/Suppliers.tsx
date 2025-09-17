@@ -241,7 +241,7 @@ export default function Suppliers() {
   return (
     <div>
       <PageHeader<Supplier>
-        data={filteredSuppliers}
+        data={Suppliers ?? []}
         extractName={(item) => item.name}
         handleIsOpen={handleOpen}
         onResults={setFilteredSuppliers}

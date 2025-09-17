@@ -2,6 +2,7 @@ import { Edit, FolderOpen, Trash2 } from "lucide-react";
 import type { ProductType, ProductTypeRequest } from "../types/models";
 import { useState } from "react";
 import CreateEditProductType from "../layouts/CreateEditProductType";
+import { Button } from "../components/index";
 
 type Props = {
   productTypeData: ProductType;
@@ -38,26 +39,34 @@ export default function ProductTypeCard({
             </div>
             <div>
               <h3
-                className="font-semibold text-gray-900 truncate max-w-52"
+                className="font-semibold text-gray-900 truncate lg:max-w-52 md:max-w-20 break-words"
                 title={productTypeData.name}
               >
                 {productTypeData.name}
               </h3>
             </div>
           </div>
-          <div className="flex space-x-2">
-            <button
+          <div className="flex space-x-2 flex-shrink-0 min-w-0 overflow-hidden">
+            <Button
+              id="edit-button"
+              aria-label="Edit"
+              type="button"
+              variant="ghost"
               onClick={handleOpen}
               className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
             >
-              <Edit className="h-4 w-4" />
-            </button>
-            <button
+              <Edit id="trash-icon" aria-label="Delete" className="h-4 w-4" />
+            </Button>
+            <Button
+              id="trash-button"
+              aria-label="Delete"
+              type="button"
+              variant="ghost"
               onClick={onClick}
               className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
             >
-              <Trash2 className="h-4 w-4" />
-            </button>
+              <Trash2 id="trash-icon" aria-label="Delete" className="h-4 w-4" />
+            </Button>
           </div>
         </div>
       </div>
