@@ -49,7 +49,6 @@ export const add = async (
     if (isAxiosError(error)) {
       throw new Error(error.response?.data || "No se pudo agregar el producto");
     } else {
-      console.error("Error desconocido al agregar producto:", error);
       throw new Error("No se pudo agregar el producto");
     }
   }
