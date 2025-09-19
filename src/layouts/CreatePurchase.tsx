@@ -1,198 +1,181 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import type { Supplier, SupplierRequest } from "../types/models";
 import { Button } from "../components";
-import * as yup from "yup";
+import type { PurchaseRequest } from "../types/models";
+import * as Yup from "yup";
 
 type Props = {
-  supplierData?: Supplier;
-  title: string;
-  onClose: () => void;
-  onSubmit: (supplerRequest: SupplierRequest) => void;
   isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (purchaseData: PurchaseRequest) => void;
 };
 
-export default function CreateEditSupplier({
-  isOpen,
-  onClose,
-  onSubmit,
-  supplierData,
-  title,
-}: Props) {
+export default function CreatePurchase({ isOpen, onClose, onSubmit }: Props) {
   if (!isOpen) return null;
 
-  const Schema = yup.object().shape({
-    name: yup
-      .string()
-      .required()
-      .max(50, "El nombre debe de tener entre 1 y 50 caracteres"),
-    contact: yup.object({
-      address: yup.string().required("La direccion es obligatoria"),
-      email: yup
-        .string()
-        .email("Correo invalido")
-        .required("El correo es obligatorio"),
-      phone: yup
-        .string()
-        .matches(
-          /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
-          "El numero debe de tener 10 digitos"
-        )
-        .min(10, "Solo se permiten numeros"),
+  const schema = Yup.object({
+    product: Yup.object({
+      name: Yup.string().required("El nombre del producto es obligatorio"),
     }),
+    supplier: Yup.object({
+      name: Yup.string().required("El nombre del proveedor es obligatorio"),
+    }),
+    quantity: Yup.number()
+      .required("La cantidad es obligatoria")
+      .min(1, "La cantidad debe ser al menos 1"),
+    amount: Yup.number()
+      .required("El monto es obligatorio")
+      .positive("El monto debe ser positivo"),
   });
 
   return (
     <div className="fixed inset-0 z-50 flex justify-center items-center bg-neutral-500 bg-opacity-50">
       <div className=" bg-white rounded-lg p-5 xs:mx-2">
-        <h1>{title}</h1>
+        <p className="text-2xl">Nueva Compra</p>
         <Formik
           initialValues={{
-            name: supplierData?.name || "",
-            contact: {
-              address: supplierData?.contact?.address || "",
-              email: supplierData?.contact?.email || "",
-              phone: supplierData?.contact?.phone || "",
+            product: {
+              name: "",
             },
+            supplier: {
+              name: "",
+              contact: {},
+            },
+            quantity: 0,
+            amount: 0,
           }}
-          validationSchema={Schema}
-          enableReinitialize
+          validationSchema={schema}
           onSubmit={(values, { resetForm }) => {
-            const supplierToSend: SupplierRequest =
-              supplierData && typeof supplierData.id === "number"
-                ? {
-                    id: supplierData.id,
-                    name: values.name,
-                    contact: {
-                      id: supplierData.contact?.id,
-                      address: values.contact?.address,
-                      email: values.contact?.email,
-                      phone: values.contact?.phone,
-                    },
-                  }
-                : {
-                    name: values.name,
-                    contact: {
-                      address: values.contact.address,
-                      email: values.contact.email,
-                      phone: values.contact.phone,
-                    },
-                  };
-            onSubmit(supplierToSend);
+            const purchaseToSend: PurchaseRequest = {
+              product: {
+                name: values.product.name,
+              },
+              supplier: {
+                name: values.supplier.name,
+                contact: {},
+              },
+              quantity: values.quantity,
+              amount: values.amount,
+            };
+            onSubmit(purchaseToSend);
             resetForm();
             onClose();
           }}
+          enableReinitialize
         >
           {({ resetForm, errors, touched }) => (
             <div className="flex justify-between my-2">
               <Form>
                 <div className="flex justify-between my-2">
-                  {touched.name && errors.name ? (
+                  {touched.product?.name && errors.product?.name ? (
                     <ErrorMessage
-                      name="name"
+                      name="product.name"
+                      component="div"
+                      className="text-red-500 text-sm w-full"
+                    />
+                  ) : (
+                    <label
+                      htmlFor="product-name"
+                      className="text-base text-neutral-500 w-full"
+                    >
+                      Nombre del Producto
+                    </label>
+                  )}
+                </div>
+                <div className="flex justify-between my-2">
+                  <Field
+                    name="product.name"
+                    autoComplete="off"
+                    className="min-h-10 rounded-lg outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 w-full pl-2 mr-2 border border-neutral-900"
+                  />
+                </div>
+
+                <div className="flex justify-between my-2">
+                  {touched.supplier?.name && errors.supplier?.name ? (
+                    <ErrorMessage
+                      name="supplier.name"
                       component="div"
                       className="text-red-500 text-sm w-full"
                     />
                   ) : (
                     <label
                       htmlFor="supplier-name"
-                      className="text-base text-neutral-800 w-full"
+                      className="text-base text-neutral-500 w-full"
                     >
-                      nombre
+                      Nombre del Proveedor
                     </label>
                   )}
                 </div>
                 <div className="flex justify-between my-2">
                   <Field
-                    autoFocus
-                    name="name"
+                    name="supplier.name"
                     autoComplete="off"
                     className="min-h-10 rounded-lg outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 w-full pl-2 mr-2 border border-neutral-900"
                   />
                 </div>
 
-                <div className="flex justify-between my-2">contacto</div>
-
                 <div className="flex justify-between my-2">
-                  {touched.contact?.address && errors.contact?.address ? (
+                  {touched.quantity && errors.quantity ? (
                     <ErrorMessage
-                      name="contact.address"
+                      name="quantity"
                       component="div"
                       className="text-red-500 text-sm w-full"
                     />
                   ) : (
                     <label
-                      htmlFor="supplier-contact-address"
+                      htmlFor="quantity"
                       className="text-base text-neutral-500 w-full"
                     >
-                      direccion
+                      Cantidad
                     </label>
                   )}
                 </div>
                 <div className="flex justify-between my-2">
                   <Field
-                    name="contact.address"
+                    type="number"
+                    name="quantity"
                     autoComplete="off"
                     className="min-h-10 rounded-lg outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 w-full pl-2 mr-2 border border-neutral-900"
                   />
                 </div>
 
                 <div className="flex justify-between my-2">
-                  {touched.contact?.email && errors.contact?.email ? (
+                  {touched.amount && errors.amount ? (
                     <ErrorMessage
-                      name="contact.email"
+                      name="amount"
                       component="div"
                       className="text-red-500 text-sm w-full"
                     />
                   ) : (
                     <label
-                      htmlFor="supplier-contact-email"
+                      htmlFor="amount"
                       className="text-base text-neutral-500 w-full"
                     >
-                      correo
+                      Monto
                     </label>
                   )}
                 </div>
                 <div className="flex justify-between my-2">
                   <Field
-                    name="contact.email"
+                    type="number"
+                    name="amount"
                     autoComplete="off"
                     className="min-h-10 rounded-lg outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 w-full pl-2 mr-2 border border-neutral-900"
                   />
                 </div>
-
                 <div className="flex justify-between my-2">
-                  {touched.contact?.phone && errors.contact?.phone ? (
-                    <ErrorMessage
-                      name="contact.phone"
-                      component="div"
-                      className="text-red-500 text-sm w-full"
-                    />
-                  ) : (
-                    <label
-                      htmlFor="supplier-contact-phone"
-                      className="text-base text-neutral-500 w-full"
-                    >
-                      telefono
-                    </label>
-                  )}
-                </div>
-                <div className="flex justify-between my-2">
-                  <Field
-                    name="contact.phone"
-                    autoComplete="off"
-                    className="min-h-10 rounded-lg outline-none duration-200 ring-2 ring-transparent focus:ring-primary-600 w-full pl-2 mr-2 border border-neutral-900"
-                  />
-                </div>
-
-                <div className="flex justify-between my-2">
-                  <Button type="submit" size="lg" variant="solid">
-                    {supplierData?.id ? "Editar proovedor" : "Crear proovedor"}
+                  <Button
+                    type="submit"
+                    variant="solid"
+                    size="lg"
+                    className="mr-3"
+                  >
+                    Guardar
                   </Button>
                   <Button
                     type="button"
                     variant="outline"
                     size="lg"
-                    className="ml-3 w-36"
+                    className="w-40"
                     onClick={() => {
                       resetForm();
                       onClose();

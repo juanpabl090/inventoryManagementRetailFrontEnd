@@ -1,5 +1,11 @@
-import type { Product } from "./Product";
-import type { Supplier } from "./Supplier";
+import type {
+  Supplier,
+  SupplierRequest,
+  SupplierResponse,
+  Product,
+  ProductResponse,
+  ProductPatchRequestDto,
+} from "./index";
 
 export interface Purchase {
   id: number;
@@ -12,8 +18,8 @@ export interface Purchase {
 
 export interface PurchaseRequest {
   id?: number;
-  product?: Product;
-  supplier?: Supplier;
+  product?: ProductPatchRequestDto;
+  supplier?: SupplierRequest;
   quantity?: number;
   amount?: number;
   date?: string;
@@ -21,8 +27,8 @@ export interface PurchaseRequest {
 
 export interface PurchaseResponse {
   id: number;
-  product: Product;
-  supplier: Supplier;
+  product: ProductResponse;
+  supplier: SupplierResponse;
   quantity: number;
   amount: number;
   date: string;

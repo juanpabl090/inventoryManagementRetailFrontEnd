@@ -30,11 +30,16 @@ export const API_PATHS = {
     UPDATEBYID: (id: number) => `/ProductType/update/id/${id}`,
   },
   SUPPLIERS: {
-    BASE: "//suppliers",
+    BASE: "/suppliers",
     ALL: "/suppliers/get",
     ADD: "/suppliers/add",
     DELETEBYID: (id: number) => `/suppliers/delete/id/${id}`,
     UPDATEBYID: (id: number) => `/suppliers/update/id/${id}`,
+  },
+  PURCHASES: {
+    BASE: "/purchase",
+    ALL: "/purchase/all",
+    ADD: "/purchase/registerPurchase",
   },
 } as const;
 
