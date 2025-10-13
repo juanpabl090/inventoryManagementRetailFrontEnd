@@ -1,4 +1,4 @@
-import { Edit, FolderOpen, Trash2 } from "lucide-react";
+import { Edit, Tag, Trash2 } from "lucide-react";
 import type { ProductType, ProductTypeRequest } from "../types/models";
 import { useState } from "react";
 import CreateEditProductType from "../layouts/CreateEditProductType";
@@ -34,8 +34,8 @@ export default function ProductTypeCard({
       <div className="bg-white rounded-lg shadow-sm border mx-2 border-gray-200 p-5 mt-5 hover:shadow-md transition-shadow">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="bg-green-100 p-2 rounded-lg">
-              <FolderOpen className="h-6 w-6 text-green-600" />
+            <div className="bg-error-100 p-2 rounded-lg">
+              <Tag className="h-6 w-6 text-error-600" />
             </div>
             <div>
               <h3

@@ -1,5 +1,4 @@
 import type { Config } from "tailwindcss";
-import { mtConfig } from "@material-tailwind/react";
 
 const config: Config = {
   content: [
@@ -82,7 +81,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["Roboto", "sans-serif"], // Fuente base para toda la app, moderna y legible
+        sans: ["  boto", "sans-serif"], // Fuente base para toda la app, moderna y legible
       },
       fontSize: {
         xs: ["0.75rem", { lineHeight: "1rem" }], // texto pequeño o labels
@@ -180,7 +179,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [mtConfig],
 };
 
 export default config;

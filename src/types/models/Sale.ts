@@ -1,3 +1,5 @@
+import type { PorductListResponse, ProductsListRequest } from "./index";
+
 export interface Sale {
   id: number;
   date: string;
@@ -5,13 +7,21 @@ export interface Sale {
 }
 
 export interface SaleRequest {
-  id: number;
-  date: string;
-  amount: number;
+  productsList: ProductsListRequest[];
+  discount: number;
 }
 
 export interface SaleResponse {
   id: number;
   date: string;
   amount: number;
+  saleDetailsResponseDto: saleDetailsResponseDto[];
+}
+
+export interface saleDetailsResponseDto {
+  id: number;
+  product: PorductListResponse;
+  amount: number;
+  discount: number;
+  quantity: number;
 }

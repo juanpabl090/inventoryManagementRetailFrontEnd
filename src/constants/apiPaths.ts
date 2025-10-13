@@ -41,6 +41,9 @@ export const API_PATHS = {
     ALL: "/purchase/all",
     ADD: "/purchase/registerPurchase",
   },
+  SALES: {
+    REGISTER_SALE: "/sales/register",
+  },
 } as const;
 
 export type apiPaths = typeof API_PATHS;
