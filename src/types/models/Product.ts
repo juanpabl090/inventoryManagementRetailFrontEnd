@@ -57,3 +57,21 @@ export interface ProductPatchRequestDto {
   supplierId?: Supplier;
   productTypeId?: ProductType;
 }
+
+export interface ProductsListRequest {
+  name: string;
+  quantity: number;
+}
+export interface PorductListResponse {
+  name: string;
+  description: string;
+  categoryId: number;
+  buyPrice: number;
+  salePrice: number;
+  stock: number;
+  createdDate: string;
+  updatedDate: string;
+  supplierId: number;
+  productTypeId: number;
+  quantity: number;
+}

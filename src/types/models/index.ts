@@ -3,6 +3,9 @@ export type {
   ProductPatchRequestDto,
   ProductRequest,
   ProductResponse,
+  ProductsListRequest as ProductsList,
+  PorductListResponse,
+  ProductsListRequest,
 } from "../../types/models/Product";
 export type {
   Category,
@@ -24,7 +27,12 @@ export type {
   PurchaseRequest,
   PurchaseResponse,
 } from "../../types/models/Purchase";
-export type { Sale, SaleRequest, SaleResponse } from "../../types/models/Sale";
+export type {
+  Sale,
+  SaleRequest,
+  SaleResponse,
+  SaleRequest as SaleDto,
+} from "../../types/models/Sale";
 export type {
   SaleDetails,
   SaleDetailsRequest,
