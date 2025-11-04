@@ -8,10 +8,10 @@ export default function Nav() {
           <Store className="h-6 w-6 text-white" />
         </div>
         <div className="flex flex-col leading-none">
-          <span className="text-lg sm:text-[20px] font-semibold text-neutral-900">
+          <span className="sticky top-0 z-40 text-lg sm:text-[20px] font-semibold text-neutral-900">
             Retail
           </span>
-          <span className="text-xs sm:text-[14px] text-neutral-500">
+          <span className="sticky top-0 z-40 text-xs sm:text-[14px] text-neutral-500">
             Sistema de Gestión de Inventario
           </span>
         </div>
