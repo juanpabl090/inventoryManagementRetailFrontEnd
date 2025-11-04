@@ -77,7 +77,7 @@ export default function LeftMenu() {
         id="default-sidebar"
         className={`fixed inset-0 h-screen w-full md:relative md:h-full md:w-64 bg-white shadow-md transition-transform duration-300 ${
           open ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 z-30`}
+        } md:translate-x-0 z-50`}
         aria-label="Sidebar"
       >
         <div className="h-full px-5 py-4 overflow-y-auto">

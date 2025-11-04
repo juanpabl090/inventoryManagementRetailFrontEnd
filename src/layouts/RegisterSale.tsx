@@ -36,7 +36,7 @@ export default function RegisterSale({
 
         const subtotal = product.salePrice * quantity;
         totalWithOutDiscount += subtotal;
-        totalDiscount += subtotal * (discount / 100);
+        totalDiscount += subtotal * discount;
       });
     });
 
@@ -129,7 +129,8 @@ export default function RegisterSale({
               <div className="flex justify-between">
                 <span>Descuento Aplicado</span>
                 <span className="text-success-600">
-                  - ${totalDiscount.toFixed(2)} ({Exportdiscount}%)
+                  - ${totalDiscount.toFixed(2)} (
+                  {(Exportdiscount * 100).toFixed(0)}%)
                 </span>
               </div>
 

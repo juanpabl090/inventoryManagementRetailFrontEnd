@@ -182,11 +182,11 @@ export default function Sales() {
       return <h1>No hay productos</h1>;
     }
     // Mapear los productos filtrados a IcardItem antes de renderizar
-    return data.map((product, index) => {
+    return data.map((product) => {
       const item = productToCardItem(product);
       return (
         <ListItemCart
-          key={index}
+          key={product.id}
           {...item}
           itemData={item}
           onCLick={addToCart}
@@ -202,18 +202,21 @@ export default function Sales() {
     if (value < 0) value = 0;
     if (value > 100) value = 100;
 
+    // Limit stored fraction precision to avoid floating point artifacts
+    const discountFraction = Number((value / 100).toFixed(4));
+
     setProductToSale((prev) => {
       if (prev.length === 0) {
         return [
           {
             productsList: [],
-            discount: value,
+            discount: discountFraction,
           },
         ];
       }
 
       return prev.map((order, index) =>
-        index === 0 ? { ...order, discount: value } : order
+        index === 0 ? { ...order, discount: discountFraction } : order
       );
     });
   };
@@ -282,9 +285,9 @@ export default function Sales() {
               </p>
             </div>
             <List className="flex flex-col gap-4 overflow-y-auto flex-1 items-stretch min-h-[120px] max-h-[calc(100vh-400px)] border-y border-neutral-400 rounded-md">
-              {cartList.map((item, index) => (
+              {cartList.map((item) => (
                 <ListItemCart
-                  key={index}
+                  key={item.name}
                   {...item}
                   itemData={item}
                   onCLick={removeFromCart}
@@ -304,7 +307,12 @@ export default function Sales() {
                 max={100}
                 step={1}
                 placeholder="0"
-                value={productToSale[0]?.discount ?? ""}
+                value={
+                  productToSale[0]?.discount !== undefined &&
+                  productToSale[0]?.discount !== null
+                    ? String(Math.round(productToSale[0].discount * 100))
+                    : ""
+                }
                 onChange={handleDiscountChange}
               />
             </div>
