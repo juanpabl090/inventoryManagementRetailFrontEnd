@@ -5,8 +5,14 @@ import {
 } from "../types/components/Charts/ChartOptions";
 import ChartComponent from "../components/ChartComponent";
 import { BarChart3, LineChart, PieChartIcon } from "lucide-react";
+import { handleTopProductsSales } from "../utils/handleReportsData";
+import { useSalesById } from "../hooks/sales";
 
 export default function Reports() {
+  const { data } = useSalesById();
+
+  const results = handleTopProductsSales(data);
+
   const LineOptions = editLineOptions({
     chart: { type: "line" },
     series: [
@@ -35,16 +41,18 @@ export default function Reports() {
 
   const PieOptions = editPieOptions({
     chart: { type: "pie" },
-    series: [10, 20, 30, 40, 50],
-    labels: [
-      "producto A",
-      "producto B",
-      "producto C",
-      "producto D",
-      "producto E",
-    ],
+    series: results[1],
+    labels: results[0],
     legend: {
       position: "bottom",
+    },
+    dataLabels: {
+      style: {
+        colors: ["#fff"],
+      },
+    },
+    tooltip: {
+      theme: "dark",
     },
   });
 
@@ -90,9 +98,8 @@ export default function Reports() {
           <ChartComponent
             Options={PieOptions}
             Icon={PieChartIcon}
-            Title="Line Chart"
-            Description="Visualize your data in a simple way using the
-            @material-tailwind/react chart plugin."
+            Title="Productos mas vendidos"
+            Description="Visualiza que porcentaje de ventas se ha llevado cada producto"
             height={350}
           />
         </div>

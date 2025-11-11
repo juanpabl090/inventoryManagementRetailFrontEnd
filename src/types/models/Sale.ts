@@ -25,3 +25,10 @@ export interface saleDetailsResponseDto {
   discount: number;
   quantity: number;
 }
+
+export interface salesByDate {
+  id: number;
+  date: string;
+  amount: number;
+  saleDetailsResponseDto: saleDetailsResponseDto[];
+}

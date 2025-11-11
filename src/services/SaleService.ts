@@ -2,7 +2,7 @@ import type { SaleRequest } from "./../types/models/Sale";
 import { isAxiosError } from "axios";
 import { API_PATHS } from "../constants/apiPaths";
 import axiosInstance from "../utils/axiosInstance";
-import type { SaleResponse } from "../types/models";
+import type { SaleResponse, salesByDate } from "../types/models";
 
 export const registerSale = async (
   SaleRequest: SaleRequest
@@ -20,3 +20,21 @@ export const registerSale = async (
     throw new Error("No se pudo registrar la compra", { cause: error });
   }
 };
+
+export const getAll = async (): Promise<salesByDate[]> => {
+  try {
+    const res = await axiosInstance.get(API_PATHS.SALES.GET_BY_ID, {
+      params: {
+        start: "2025-01-01",
+        end: "2025-12-31",
+      },
+    });
+    return res.data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      throw new Error(error?.response?.data || error?.message);
+    }
+    throw new Error("No se pudo obtener la lista de ventas", { cause: error });
+  }
+};
+

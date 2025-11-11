@@ -43,6 +43,7 @@ export const API_PATHS = {
   },
   SALES: {
     REGISTER_SALE: "/sales/register",
+    GET_BY_ID: "/sales/by-date",
   },
 } as const;
 
