@@ -32,6 +32,8 @@ export type {
   SaleRequest,
   SaleResponse,
   SaleRequest as SaleDto,
+  saleDetailsResponseDto,
+  salesByDate,
 } from "../../types/models/Sale";
 export type {
   SaleDetails,

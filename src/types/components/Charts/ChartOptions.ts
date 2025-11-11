@@ -1,40 +1,6 @@
-import tailwindConfig from "../../../../tailwind.config";
-import resolveConfig from "tailwindcss/resolveConfig";
-
-const fullConfig = resolveConfig(tailwindConfig);
-const allTailwindColors = Object.values(fullConfig.theme.colors).flatMap(
-  (color: string | object) => {
-    if (typeof color === "string") return [color];
-    if (typeof color === "object") return Object.values(color);
-  }
-);
-
-function suffleArrayColors(array: unknown[]): unknown[] {
-  return array
-    .map((item) => ({ item, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ item }) => item);
-}
-
-// Note: generate shuffled color pools inside each editor function so
-// different charts don't accidentally reuse the exact same slice/order
-// of colors (which caused line & bar charts to match colors).
-// Keep the helper `suffleArrayColors` and `allTailwindColors` as sources.
-
 export const editLineOptions = (
   options: ApexCharts.ApexOptions
 ): ApexCharts.ApexOptions => {
-  // create a shuffled color pool per-call so different charts don't
-  // get the same slice/order of colors when no explicit colors are passed
-  const colorsPool = suffleArrayColors(allTailwindColors);
-  const seriesCount = Array.isArray(options.series)
-    ? options.series.length
-    : options.series
-    ? 1
-    : 0;
-  const defaultColors =
-    options.colors || colorsPool.slice(0, Math.max(seriesCount, 1));
-
   const lineOptions: ApexCharts.ApexOptions = {
     chart: {
       type: options.chart?.type || "line",
@@ -50,8 +16,7 @@ export const editLineOptions = (
 
     series: options.series || [],
 
-    // use the computed defaultColors (or options.colors if provided)
-    colors: defaultColors,
+    colors: options.colors,
 
     stroke: {
       curve: options.stroke?.curve || "smooth",
@@ -215,24 +180,6 @@ export const editLineOptions = (
 export const editBarOptions = (
   options: ApexCharts.ApexOptions
 ): ApexCharts.ApexOptions => {
-  // create a shuffled color pool for this bar chart
-  const colorsPool = suffleArrayColors(allTailwindColors);
-  // If there's a single series with an array of data, we want a color per data point
-  let dataCount = 0;
-  if (Array.isArray(options.series) && options.series.length === 1) {
-    const s0 = options.series[0] as { data?: unknown[] } | undefined;
-    if (Array.isArray(s0?.data)) dataCount = s0.data.length;
-    else dataCount = 1;
-  } else {
-    dataCount = Array.isArray(options.series) ? options.series.length : 0;
-  }
-  const defaultColors =
-    options.colors || colorsPool.slice(0, Math.max(dataCount, 1));
-  const defaultDistributed =
-    options.plotOptions?.bar?.distributed !== undefined
-      ? options.plotOptions.bar.distributed
-      : Array.isArray(options.series) && options.series.length === 1;
-
   const barOptions: ApexCharts.ApexOptions = {
     chart: {
       type: options.chart?.type || "bar",
@@ -251,17 +198,27 @@ export const editBarOptions = (
     series: options.series || [],
 
     // Colores de las series (o por punto si `distributed` está activo)
-    colors: defaultColors,
+    colors: [
+      "#1b4332",
+      "#2d6a4f",
+      "#344e41",
+      "#3a5a40",
+      "#40916c",
+      "#588157",
+      "#52b788",
+      "#74c69d",
+      "#95d5b2",
+      "#a3b18a",
+      "#b7e4c7",
+      "#dad7cd",
+    ],
 
     // Opciones de configuración de barras
     plotOptions: {
       bar: {
         horizontal: options.plotOptions?.bar?.horizontal || false,
         columnWidth: options.plotOptions?.bar?.columnWidth || "25%",
-        distributed:
-          options.plotOptions?.bar?.distributed !== undefined
-            ? options.plotOptions.bar.distributed
-            : defaultDistributed,
+        distributed: options.plotOptions?.bar?.distributed || true,
         ...options.plotOptions?.bar,
       },
       ...options.plotOptions,
@@ -417,17 +374,6 @@ export const editBarOptions = (
 export const editPieOptions = (
   options: ApexCharts.ApexOptions
 ): ApexCharts.ApexOptions => {
-  const colorsPool = suffleArrayColors(allTailwindColors);
-  const seriesCount = Array.isArray(options.series)
-    ? options.series.length
-    : options.series
-    ? 1
-    : 0;
-  const labelsCount = Array.isArray(options.labels) ? options.labels.length : 0;
-  const defaultColors =
-    options.colors ||
-    colorsPool.slice(0, Math.max(seriesCount, labelsCount, 1));
-
   const pieOptions: ApexCharts.ApexOptions = {
     chart: {
       type: options.chart?.type || "pie",
@@ -450,7 +396,31 @@ export const editPieOptions = (
     labels: options.labels || [],
 
     // Colores de las series
-    colors: defaultColors,
+    colors: [
+      "#0f172a",
+      "#172554",
+      "#1e3a8a",
+      "#1e40af",
+      "#1d4ed8",
+      "#2563eb",
+      "#3b82f6",
+      "#1e5fce",
+      "#1a56db",
+      "#1c64f2",
+      "#3b78e7",
+      "#4a7de8",
+      "#5d89e8",
+      "#60a5fa",
+      "#4f97f7",
+      "#6ba4f8",
+      "#7bb2f9",
+      "#93c5fd",
+      "#a6d1fd",
+      "#b8dcfe",
+      "#c7e2ff",
+      "#d4e8ff",
+      "#e1eeff",
+    ],
 
     // Etiquetas sobre los segmentos
     dataLabels: {
@@ -459,7 +429,7 @@ export const editPieOptions = (
           ? options.dataLabels.enabled
           : false,
       style: {
-        colors: options.dataLabels?.style?.colors || ["#111827"],
+        colors: options.dataLabels?.style?.colors || ["FF0000"],
         ...options.dataLabels?.style,
       },
       background: {
@@ -493,7 +463,7 @@ export const editPieOptions = (
 
     // Tooltips (al pasar el mouse)
     tooltip: {
-      theme: options.tooltip?.theme || "light",
+      theme: options.tooltip?.theme || "#fff",
       y: {
         formatter:
           (Array.isArray(options.tooltip?.y)
