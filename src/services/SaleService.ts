@@ -21,12 +21,15 @@ export const registerSale = async (
   }
 };
 
-export const getAll = async (): Promise<salesByDate[]> => {
+export const getAll = async (
+  start: string,
+  end: string
+): Promise<salesByDate[]> => {
   try {
     const res = await axiosInstance.get(API_PATHS.SALES.GET_BY_ID, {
       params: {
-        start: "2025-01-01",
-        end: "2025-12-31",
+        start: start,
+        end: end,
       },
     });
     return res.data;
@@ -37,4 +40,3 @@ export const getAll = async (): Promise<salesByDate[]> => {
     throw new Error("No se pudo obtener la lista de ventas", { cause: error });
   }
 };
-

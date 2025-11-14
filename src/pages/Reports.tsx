@@ -5,13 +5,45 @@ import {
 } from "../types/components/Charts/ChartOptions";
 import ChartComponent from "../components/ChartComponent";
 import { BarChart3, LineChart, PieChartIcon } from "lucide-react";
-import { handleTopProductsSales } from "../utils/handleReportsData";
+import {
+  handleTopProductsSales,
+  salesOfEveryMonth,
+} from "../utils/handleReportsData";
 import { useSalesById } from "../hooks/sales";
+import { useState } from "react";
 
 export default function Reports() {
-  const { data } = useSalesById();
+  const [date, setDate] = useState<{
+    start: string;
+    end: string;
+  }>({
+    start: "",
+    end: "",
+  });
 
-  const results = handleTopProductsSales(data);
+  const handleStartDate = (value: string) => {
+    setDate({ ...date, start: value });
+    const startDate = new Date(value);
+    const endDate = new Date(date.end);
+    if (startDate > endDate) {
+      throw new Error(
+        "La fecha de inicio no puede ser mayor que la fecha final"
+      );
+    }
+  };
+
+  const handleEndDate = (value: string) => {
+    setDate({ ...date, end: value });
+    const endDate = new Date(value);
+    const startDate = new Date(date.start);
+    if (endDate < startDate) {
+      throw new Error("La fecha final no puede ser menor que la fecha inicial");
+    }
+  };
+
+  const { data } = useSalesById(date.start, date.end);
+  const handleTopProductsSalesResponse = handleTopProductsSales(data);
+  const res = salesOfEveryMonth(data);
 
   const LineOptions = editLineOptions({
     chart: { type: "line" },
@@ -41,8 +73,8 @@ export default function Reports() {
 
   const PieOptions = editPieOptions({
     chart: { type: "pie" },
-    series: results[1],
-    labels: results[0],
+    series: handleTopProductsSalesResponse[1],
+    labels: handleTopProductsSalesResponse[0],
     legend: {
       position: "bottom",
     },
@@ -61,24 +93,11 @@ export default function Reports() {
     series: [
       {
         name: "Sales",
-        data: [40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150],
+        data: res[1],
       },
     ],
     xaxis: {
-      categories: [
-        "Ene",
-        "Feb",
-        "Mar",
-        "Abr",
-        "May",
-        "Jun",
-        "Jul",
-        "Ago",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
+      categories: res[0],
     },
   });
 
@@ -91,6 +110,25 @@ export default function Reports() {
           </h1>
           <p>Administra el catálogo de productos de tu empresa</p>
         </div>
+        <div className="flex items-center">
+          <p className="text-xl mr-2">Inicio:</p>
+          <input
+            type="date"
+            name="date-start"
+            id="date-start-id"
+            className="border border-primary-500 w-full p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue- focus:border-blue-500 text-gray-700 bg-white mr-2"
+            onChange={(value) => handleStartDate(value.target.value)}
+          />
+
+          <p className="text-xl mr-2">Final:</p>
+          <input
+            type="date"
+            name="date-end"
+            id="date-end-id"
+            className="border border-error-500 w-full p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue- focus:border-blue-500 text-gray-700 bg-white"
+            onChange={(value) => handleEndDate(value.target.value)}
+          />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 grid-rows-3 gap-4 sm:grid-cols-1 sm:grid-rows-3 lg:grid-cols-2 lg:grid-rows-2">
@@ -99,7 +137,7 @@ export default function Reports() {
             Options={PieOptions}
             Icon={PieChartIcon}
             Title="Productos mas vendidos"
-            Description="Visualiza que porcentaje de ventas se ha llevado cada producto"
+            Description="Visualiza que porcentaje de ventas que se ha llevado cada producto, en el intervalo de tiempo otorgado."
             height={350}
           />
         </div>
@@ -108,9 +146,8 @@ export default function Reports() {
           <ChartComponent
             Options={BarOptions}
             Icon={BarChart3}
-            Title="Line Chart"
-            Description="Visualize your data in a simple way using the
-            @material-tailwind/react chart plugin."
+            Title="Resumen de ventas"
+            Description="Visualiza la cantidad de ventas, en el intervalo de tiempo otorgado."
             height={350}
           />
         </div>
