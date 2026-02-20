@@ -1,24 +1,28 @@
-import axios from "axios";
-import type { AuthRequest } from "../types/auth/auth";
-
+import type { AuthRequest, AuthRegisterRequest } from "../types/auth/auth";
 import { API_PATHS } from "../constants/apiPaths";
+import axiosInstance from "../utils/axiosInstance";
 
 export const login = async (authRequest: AuthRequest) => {
-  try {
-    const res = await axios.post(
-      API_PATHS.URL.BASE + API_PATHS.AUTH.LOGIN,
-      authRequest,
-      {
-        withCredentials: true,
-      }
-    );
-    return res.data;
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(error?.response?.data.messagge || "Hubo un error");
-    }
-    throw new Error("Hubo un error" + error);
-  }
+  const res = await axiosInstance.post(API_PATHS.AUTH.LOGIN, authRequest, {
+    withCredentials: true,
+  });
+  return res.data;
 };
 
-export const logout = () => {};
+export const logout = async () => {
+  const data = await axiosInstance.post(API_PATHS.AUTH.LOGOUT);
+  return data;
+};
+
+export const register = async (authRegisterRequest: AuthRegisterRequest) => {
+  await axiosInstance.post(API_PATHS.AUTH.REGISTER, authRegisterRequest);
+};
+
+export const me = async () => {
+  const res = await axiosInstance.get(API_PATHS.AUTH.ME);
+  return res.data;
+};
+
+export const refreshToken = async () => {
+  return await axiosInstance.post(API_PATHS.AUTH.REFRESH, {}, {withCredentials: true});
+};

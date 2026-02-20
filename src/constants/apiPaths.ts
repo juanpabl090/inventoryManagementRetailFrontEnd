@@ -5,6 +5,10 @@ export const API_PATHS = {
   AUTH: {
     BASE: "/auth",
     LOGIN: "/auth/login",
+    LOGOUT: "/auth/logout",
+    ME: "/auth/me",
+    REFRESH: "/auth/refresh",
+    REGISTER: "/auth/register",
   },
   PRODUCTS: {
     BASE: "/products",

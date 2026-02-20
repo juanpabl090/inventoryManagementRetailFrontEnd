@@ -5,6 +5,7 @@ import { usePostPurchase, usePurchases } from "../hooks/Purchase/index";
 import { useEffect, useState } from "react";
 import CreatePurchase from "../layouts/CreatePurchase";
 import useAlert from "../hooks/alert/useAlert";
+import Loader from "../components/loader";
 
 const alertConfig = {
   GET_EMPTY: {
@@ -133,11 +134,7 @@ export default function Purchases() {
   }, [PostIsError, PostIsSuccess, showAlert, PostReset]);
 
   if (GetIsLoading) {
-    return (
-      <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
-        <p className="text-center">Cargando</p>
-      </div>
-    );
+    return <Loader />;
   }
 
   if (GetError || PostError) {

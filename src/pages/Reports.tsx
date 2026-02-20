@@ -50,24 +50,11 @@ export default function Reports() {
     series: [
       {
         name: "Sales",
-        data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
+        data: res[1],
       },
     ],
     xaxis: {
-      categories: [
-        "Ene",
-        "Feb",
-        "Mar",
-        "Abr",
-        "May",
-        "Jun",
-        "Jul",
-        "Ago",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
+      categories: res[0],
     },
   });
 
@@ -110,8 +97,8 @@ export default function Reports() {
           </h1>
           <p>Administra el catálogo de productos de tu empresa</p>
         </div>
-        <div className="flex items-center">
-          <p className="text-xl mr-2">Inicio:</p>
+        <div className="flex flex-col xs:sm:md:flex-row items-center">
+          <p className="text-xl mr-2">Inicio</p>
           <input
             type="date"
             name="date-start"
@@ -120,7 +107,7 @@ export default function Reports() {
             onChange={(value) => handleStartDate(value.target.value)}
           />
 
-          <p className="text-xl mr-2">Final:</p>
+          <p className="text-xl mr-2">Final</p>
           <input
             type="date"
             name="date-end"

@@ -1,6 +1,13 @@
 import { Store } from "lucide-react";
+import { useContext } from "react";
+import { AuthContext } from "../context/authContext/authContext";
 
 export default function Nav() {
+  const auth = useContext(AuthContext);
+
+  if (auth?.loading) return null;
+  if (!auth?.user) return null;
+
   return (
     <nav className="flex items-center bg-white h-16 border-b-2 border-neutral-200 w-full px-4 sm:px-6 lg:px-8">
       <div className="flex items-center space-x-3 w-full max-w-7xl mx-auto">

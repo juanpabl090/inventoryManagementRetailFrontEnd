@@ -11,6 +11,7 @@ import {
 } from "../hooks/products/index";
 import type { ProductRequest } from "../types/models/index";
 import useAlert from "../hooks/alert/useAlert";
+import Loader from "../components/loader";
 
 const alertConfig = {
   GET_EMPTY: {
@@ -223,11 +224,7 @@ export default function Products() {
   }
 
   if (productLoading) {
-    return (
-      <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
-        <p className="text-center">Cargando</p>
-      </div>
-    );
+    return <Loader />;
   }
 
   const handleClose = () => setIsOpen(false);

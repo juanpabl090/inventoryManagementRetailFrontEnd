@@ -25,6 +25,9 @@ export default function LeftMenu() {
   const [ActiveItem, setActiveItem] = useState<string>("");
   const auth = useContext(AuthContext);
 
+  if (auth?.loading) return null;
+  if (!auth?.user) return null;
+
   const menuItems: menuItem[] = [
     {
       icon: Package,
@@ -62,7 +65,7 @@ export default function LeftMenu() {
   };
 
   const handleLogOut = () => {
-    auth?.logout();
+    auth?.logOut();
   };
 
   return (
@@ -108,12 +111,12 @@ export default function LeftMenu() {
               onClick={handleLogOut}
               className="text-gray-900 hover:bg-gray-200"
             >
-              <div className="flex items-center py-2 rounded-lg group">
+              <button className="flex items-center py-2 rounded-lg group">
                 <span className="mr-4">
                   <LogOut strokeWidth={1} className="ml-5" />
                 </span>
                 <span className="ms-3">Log Out</span>
-              </div>
+              </button>
             </li>
           </ul>
         </div>

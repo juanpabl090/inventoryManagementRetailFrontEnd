@@ -1,4 +1,3 @@
-import { isAxiosError } from "axios";
 import { API_PATHS } from "../constants/apiPaths";
 import type {
   PurchaseResponse,
@@ -8,32 +7,16 @@ import type {
 import axiosInstance from "../utils/axiosInstance";
 
 export const getAll = async (): Promise<Purchase[]> => {
-  try {
-    const res = await axiosInstance.get(API_PATHS.PURCHASES.ALL);
-    return res.data;
-  } catch (error) {
-    if (isAxiosError(error)) {
-      throw new Error(error.response?.data?.message || error.message);
-    }
-    throw new Error("An unexpected error occurred", {
-      cause: error,
-    });
-  }
+  const res = await axiosInstance.get(API_PATHS.PURCHASES.ALL);
+  return res.data;
 };
 
 export const add = async (
-  purchaseRequest: PurchaseRequest
+  purchaseRequest: PurchaseRequest,
 ): Promise<PurchaseResponse> => {
-  try {
-    const res = await axiosInstance.post(
-      API_PATHS.PURCHASES.ADD,
-      purchaseRequest
-    );
-    return res.data;
-  } catch (error) {
-    if (isAxiosError(error)) {
-      throw new Error(error.response?.data?.message || error.message);
-    }
-    throw new Error("No se pudo agregar la compra", { cause: error });
-  }
+  const res = await axiosInstance.post(
+    API_PATHS.PURCHASES.ADD,
+    purchaseRequest,
+  );
+  return res.data;
 };

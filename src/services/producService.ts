@@ -1,4 +1,3 @@
-import { isAxiosError } from "axios";
 import type {
   ProductResponse,
   ProductRequest,
@@ -31,57 +30,32 @@ export const getProductByName = async (name: string) => {
 
 export const getProductTypeName = async (productTypeName: string) => {
   const res = await axiosInstance.get(
-    `${path}/productTypeName/${productTypeName}`
+    `${path}/productTypeName/${productTypeName}`,
   );
   return res.data;
 };
 
 export const add = async (
-  product: ProductRequest
+  product: ProductRequest,
 ): Promise<ProductResponse> => {
-  try {
-    const res = await axiosInstance.post<ProductResponse>(
-      API_PATHS.PRODUCTS.ADD,
-      product
-    );
-    return res.data;
-  } catch (error: unknown) {
-    if (isAxiosError(error)) {
-      throw new Error(error.response?.data || "No se pudo agregar el producto");
-    } else {
-      throw new Error("No se pudo agregar el producto");
-    }
-  }
+  const res = await axiosInstance.post<ProductResponse>(
+    API_PATHS.PRODUCTS.ADD,
+    product,
+  );
+  return res.data;
 };
 
 export const deleteById = async (id: number): Promise<void> => {
-  try {
-    await axiosInstance.delete(API_PATHS.PRODUCTS.DELETE_BY_ID(id));
-  } catch (error) {
-    if (isAxiosError(error)) {
-      throw new Error(
-        error?.response?.data || "No se pudo eliminar el producto"
-      );
-    }
-  }
+  await axiosInstance.delete(API_PATHS.PRODUCTS.DELETE_BY_ID(id));
 };
 
 export const updatePatchProductByName = async (
-  product: ProductRequest
+  product: ProductRequest,
 ): Promise<ProductResponse> => {
   const name = product.name;
-  try {
-    const res = await axiosInstance.patch(
-      API_PATHS.PRODUCTS.UPDATE_PATCH_PRODUCT_BY_NAME(name),
-      product
-    );
-    return res.data;
-  } catch (error) {
-    if (isAxiosError(error)) {
-      throw new Error(
-        error?.response?.data || "No se pudo actualizar el producto"
-      );
-    }
-    throw new Error("Error desconocido al actualizar el producto" + error);
-  }
+  const res = await axiosInstance.patch(
+    API_PATHS.PRODUCTS.UPDATE_PATCH_PRODUCT_BY_NAME(name),
+    product,
+  );
+  return res.data;
 };

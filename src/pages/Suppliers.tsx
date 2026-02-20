@@ -10,6 +10,7 @@ import {
 } from "../hooks/Supplier/index";
 import useAlert from "../hooks/alert/useAlert";
 import CreateEditSupplier from "../layouts/CreateEditSupplier";
+import Loader from "../components/loader";
 
 const alertConfig = {
   GET_EMPTY: {
@@ -106,7 +107,7 @@ export default function Suppliers() {
 
   const handleSupplier = (
     supplerRequest: SupplierRequest,
-    onSuccess: () => void
+    onSuccess: () => void,
   ) => {
     PutMutate(supplerRequest, {
       onSuccess: () => {
@@ -202,9 +203,7 @@ export default function Suppliers() {
   }, [DeleteIsError, DeleteIsSuccess, showAlert, DeleteReset]);
 
   if (GetIsLoading) {
-    <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
-      <p className="text-center">Cargando</p>
-    </div>;
+    return <Loader />;
   }
 
   if (GetError || PostError || PutError || DeleteError) {
