@@ -1,6 +1,7 @@
-import { lazy, Suspense, useContext } from "react";
+import { lazy, useContext } from "react";
 import { Navigate, Outlet, Route, Routes } from "react-router";
 import { AuthContext } from "../context/authContext/authContext";
+import Loader from "../components/loader";
 
 const Products = lazy(() => import("../pages/Products"));
 const Categories = lazy(() => import("../pages/Categories"));
@@ -11,46 +12,81 @@ const Sales = lazy(() => import("../pages/Sales"));
 const Reports = lazy(() => import("../pages/Reports"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 const Login = lazy(() => import("../pages/auth/Login"));
+const Register = lazy(() => import("../pages/auth/Register"));
+const Nav = lazy(() => import("../layouts/Nav"));
+const LeftMenu = lazy(() => import("../layouts/LeftMenu"));
 
-const PageLoader = () => {
-  return (
-    <div className="flex justify-center items-center h-64">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-    </div>
-  );
-};
+const ProtectedRoutes = ({
+  isAuthenticated,
+  isLoading,
+}: {
+  isAuthenticated: boolean;
+  isLoading: boolean | undefined;
+}) => {
+  if (isLoading) {
+    return <Loader />;
+  }
 
-const ProtectedRoutes = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
   return <Outlet />;
 };
 
+function PublicLayout() {
+  return <Outlet />;
+}
+
+function PrivateLayout() {
+  return (
+    <div className="min-h-screen bg-white flex flex-col">
+      <div className="sticky top-0 z-40 w-full">
+        <Nav />
+      </div>
+      <div className="flex flex-1 ">
+        <div className="max-w-7xl flex-shrink-0">
+          <LeftMenu />
+        </div>
+        <main className="flex flex-col bg-neutral-100 w-screen p-5">
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+}
+
 export default function AppRoute() {
   const auth = useContext(AuthContext);
   return (
-    <Suspense fallback={<PageLoader />}>
-      <Routes>
+    <Routes>
+      {/* Rutas públicas */}
+      <Route element={<PublicLayout />}>
         <Route path="/login" element={<Login />} />
-        <Route
-          element={<ProtectedRoutes isAuthenticated={!!auth?.accessToken} />}
-        >
+        <Route path="/register" element={<Register />} />
+      </Route>
+
+      {/* Rutas protegidas */}
+      <Route
+        element={
+          <ProtectedRoutes
+            isAuthenticated={!!auth?.user}
+            isLoading={auth?.loading}
+          />
+        }
+      >
+        <Route element={<PrivateLayout />}>
           <Route path="/" element={<Navigate to="products" replace />} />
-          <Route path="/Products" element={<Products />} />
-          <Route path="/Categories" element={<Categories />} />
-          <Route path="/ProductTypes" element={<ProductTypes />} />
-          <Route path="/Suppliers" element={<Suppliers />} />
-          <Route path="/Purchases" element={<Purchases />} />
-          <Route path="/Sales" element={<Sales />} />
-          <Route path="/Reports" element={<Reports />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/productTypes" element={<ProductTypes />} />
+          <Route path="/suppliers" element={<Suppliers />} />
+          <Route path="/purchases" element={<Purchases />} />
+          <Route path="/sales" element={<Sales />} />
+          <Route path="/reports" element={<Reports />} />
         </Route>
-        <Route
-          path="*"
-          element={<Navigate to={auth?.accessToken ? "/" : "/login"} />}
-        />
-      </Routes>
-    </Suspense>
+      </Route>
+
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }

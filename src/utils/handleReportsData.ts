@@ -22,4 +22,25 @@ export const handleTopProductsSales = (
   return [labes, series];
 };
 
-export const salesOfEveryMonth = () => {};
+export const salesOfEveryMonth = (
+  salesByDate: salesByDate[] | undefined
+): [string[], number[]] => {
+  const months = new Map<string, number>();
+  salesByDate?.map(({ amount, date: dateMonth }) => {
+    const date = new Date(dateMonth);
+    const mes = new Intl.DateTimeFormat("es-ES", { month: "long" }).format(
+      date
+    );
+    const prev = months.get(mes) ?? 0;
+    const total = Number((prev + amount).toFixed(2));
+    months.set(mes, total);
+  });
+  const labels: string[] = [];
+  const series: number[] = [];
+  months.forEach((value, key) => {
+    labels.push(key);
+    series.push(value);
+  });
+  series.sort((a, b) => b - a);
+  return [labels, series];
+};

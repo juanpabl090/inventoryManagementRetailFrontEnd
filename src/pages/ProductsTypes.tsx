@@ -10,6 +10,7 @@ import PageHeader from "../layouts/PageHeader";
 import type { ProductType, ProductTypeRequest } from "../types/models";
 import CreateEditProductType from "../layouts/CreateEditProductType";
 import ProductTypeCard from "../components/ProductTypeCard";
+import Loader from "../components/loader";
 
 const alertConfig = {
   GET_EMPTY: {
@@ -224,11 +225,7 @@ export default function ProductsTypes() {
   };
 
   if (GetIsLoading) {
-    return (
-      <div className="flex justify-center items-center text-2xl text-neutral-900 font-semibold w-full h-full">
-        <p className="text-center">Cargando</p>
-      </div>
-    );
+    return <Loader />;
   }
 
   if (DeleteError || PutError || GetError || PostError) {
